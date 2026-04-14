@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-        <h1>PreLoved Marketplace</h1>
+        <h1>DevEx</h1>
     </>
   )
 }
