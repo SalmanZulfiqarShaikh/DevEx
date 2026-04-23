@@ -1,9 +1,14 @@
 const express = require("express");
-const connectDB = require("../Backend/config/db");
-const port = 3000;
+const connectDB = require("./config/db");
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const dotenv = require('dotenv');
+dotenv.config();
 
-app.use(express.json());
+const port = process.env.PORT || 3000;
 const app = express();
+app.use(express.json());
 connectDB();  // Connecting to MongoDB
 
 
