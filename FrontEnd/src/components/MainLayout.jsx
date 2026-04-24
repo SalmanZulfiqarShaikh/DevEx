@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
+import DevExChatbot from './DevEXChatBot';
 
 const MainLayout = ({ children }) => {
   // Initialize theme from localStorage or default to dark
@@ -43,10 +44,18 @@ const MainLayout = ({ children }) => {
           </div>
 
           <div className="hidden md:flex items-center gap-10">
-            {['About', 'Work', 'Services', 'Process', 'FAQ'].map((link) => (
+            {['About', 'Process', 'Categories', 'Reviews', 'FAQ'].map((link) => (
               <a 
                 key={link} 
                 href={`#${link.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(link.toLowerCase());
+                  if (el) {
+                    const top = el.getBoundingClientRect().top + window.scrollY - 90;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                  }
+                }}
                 className="text-[13px] font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors tracking-wide nav-link"
               >
                 {link}
@@ -84,6 +93,9 @@ const MainLayout = ({ children }) => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Chatbot */}
+      <DevExChatbot />
     </div>
   );
 };
