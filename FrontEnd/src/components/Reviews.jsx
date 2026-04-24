@@ -20,6 +20,12 @@ const Reviews = () => {
       review: "I've used every marketplace out there — nothing comes close to DevEx. The valuation engine is incredibly accurate and the team genuinely cares about both buyers and sellers. Absolute game-changer.",
     },
     {
+      name: 'Lizard Wiz',
+      role: 'Content Creator & SaaS Evangelist',
+      image: 'https://yt3.googleusercontent.com/4vTd6lQgW2dJqqBTIoLj9_yMccnBiDk5j2K1XHzglDhoBqqEdsrXhoXrujl38euQnACsSdpyiA=s900-c-k-c0x00ffffff-no-rj',
+      review: "DevEx is pure magic for anyone in the SaaS space. The platform is beautifully designed, incredibly intuitive, and the verified analytics gave me instant confidence. Easily the best marketplace I've used.",
+    },
+    {
       name: 'Oman Gazhnavi',
       role: 'Visionary Leader & Platform Enthusiast',
       image: 'https://pbs.twimg.com/profile_images/2030245486968639488/rLepme8C_400x400.jpg',

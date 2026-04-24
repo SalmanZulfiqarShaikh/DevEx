@@ -152,17 +152,17 @@ const FeaturedListings = forwardRef((props, ref) => {
               variants={itemVariants}
               className="rounded-2xl border border-[var(--border)] bg-[var(--accent-bg)] hover:bg-[var(--bg)] transition-all duration-300 p-8 flex flex-col group cursor-pointer hover:border-[var(--text-h)]/20 hover:-translate-y-2 card-hover-shadow"
             >
-              <div className="flex justify-between items-start mb-6">
+              <div className="flex flex-col gap-4 mb-6">
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500 ${listing.iconColor}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500 shrink-0 ${listing.iconColor}`}>
                     {listing.icon}
                   </div>
-                  <div>
-                    <h3 className="font-bold text-[var(--text-h)] text-lg">{listing.name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-[var(--text-h)] text-lg truncate">{listing.name}</h3>
                     <p className="text-[10px] uppercase tracking-widest text-[var(--text)]/60 font-bold">Verified Listing</p>
                   </div>
                 </div>
-                <span className="text-sm font-bold text-[var(--text-h)] bg-[var(--accent-bg)] px-3 py-1 rounded-full border border-[var(--border)]">{listing.price}</span>
+                <span className="text-sm font-bold text-[var(--text-h)] bg-[var(--accent-bg)] px-3 py-1.5 rounded-full border border-[var(--border)] self-start whitespace-nowrap">{listing.price}</span>
               </div>
               
               <p className="text-sm text-[var(--text)] mb-8 flex-grow leading-relaxed">
