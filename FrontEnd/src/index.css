@@ -108,3 +108,13 @@ h3 {
 .card-hover-shadow:hover {
   box-shadow: var(--card-shadow);
 }
+
+/* Logo theme switching */
+.logo {
+  filter: none;
+  transition: filter 0.3s ease;
+}
+
+:root.light .logo {
+  filter: invert(1);
+}

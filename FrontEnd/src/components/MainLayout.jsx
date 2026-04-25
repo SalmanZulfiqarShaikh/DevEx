@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import DevExChatbot from './DevEXChatBot';
+import devexLogoDark from '../assets/DevEx_dark.webp';
 
 const MainLayout = ({ children }) => {
   // Initialize theme from localStorage or default to dark
@@ -34,13 +35,7 @@ const MainLayout = ({ children }) => {
           
           {/* Logo Area */}
           <div className="flex items-center gap-2 cursor-pointer group">
-            <div className="w-8 h-8 rounded-lg bg-[var(--accent-bg)] flex items-center justify-center group-hover:bg-[var(--accent-bg)]/20 transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-            </div>
-            <span className="font-bold text-xl tracking-tighter text-[var(--text-h)]">DevEx</span>
+            <img src={devexLogoDark} alt="DevEx Logo" className="h-10 w-auto object-contain logo" />
           </div>
 
           <div className="hidden md:flex items-center gap-10">

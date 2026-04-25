@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import devexLogoDark from '../assets/DevEx_dark.webp';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -38,13 +39,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-[var(--accent-bg)] flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]">
-                  <polyline points="16 18 22 12 16 6"></polyline>
-                  <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-              </div>
-              <span className="font-bold text-xl tracking-tighter text-[var(--text-h)]">DevEx</span>
+              <img src={devexLogoDark} alt="DevEx Logo" className="h-10 w-auto object-contain logo" />
             </div>
             <p className="text-sm text-[var(--text)] mb-6 leading-relaxed">
               Premium digital experiences built by{' '}
