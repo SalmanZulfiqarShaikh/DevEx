@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -139,10 +140,14 @@ const Footer = () => {
             {'\u00A9'} {currentYear} Team DevEx. All rights reserved.
           </p>
           <div className="flex gap-8">
-            {['Privacy Policy', 'Terms of Service', 'Cookies'].map((item) => (
-              <a key={item} href="#" className="text-xs text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
-                {item}
-              </a>
+            {[
+              { label: 'Our Story', to: '/story' },
+              { label: 'Terms of Service', to: '/terms' },
+              { label: 'Cookies', to: '/cookies' },
+            ].map((item) => (
+              <Link key={item.label} to={item.to} className="text-xs text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
+                {item.label}
+              </Link>
             ))}
           </div>
         </motion.div>

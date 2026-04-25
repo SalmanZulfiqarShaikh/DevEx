@@ -48,23 +48,31 @@ const Hero = ({ onBrowseClick }) => {
         <motion.div 
           {...fadeInUp}
           transition={{ ...fadeInUp.transition, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-6"
+          className="flex flex-col items-center gap-6"
         >
+          <div className="flex flex-col sm:flex-row gap-6">
+            <button 
+              onClick={onBrowseClick} 
+              className="bg-[var(--accent)] text-[var(--bg)] px-10 py-4 rounded-xl font-bold hover:opacity-90 transition-all cursor-pointer btn-premium flex items-center gap-2 group"
+            >
+              Browse as Buyer
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button 
+              onClick={handleSellClick} 
+              className="border border-[var(--border)] text-[var(--text)] px-10 py-4 rounded-xl font-bold hover:bg-[var(--accent-bg)] transition-all cursor-pointer btn-premium"
+            >
+              Sell Your SaaS
+            </button>
+          </div>
           <button 
             onClick={onBrowseClick} 
-            className="bg-[var(--accent)] text-[var(--bg)] px-10 py-4 rounded-xl font-bold hover:opacity-90 transition-all cursor-pointer btn-premium flex items-center gap-2 group"
+            className="border border-[var(--border)] text-[var(--text)] px-8 py-3 rounded-xl font-bold hover:bg-[var(--accent-bg)] transition-all cursor-pointer btn-premium"
           >
-            Browse as Buyer
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-          <button 
-            onClick={handleSellClick} 
-            className="border border-[var(--border)] text-[var(--text)] px-10 py-4 rounded-xl font-bold hover:bg-[var(--accent-bg)] transition-all cursor-pointer btn-premium"
-          >
-            Sell Your SaaS
+            Browse as Guest
           </button>
         </motion.div>
       </div>
