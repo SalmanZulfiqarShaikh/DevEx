@@ -1,4 +1,4 @@
-class node {
+class ListNode {
     constructor(listing) {
         this.listingId = listing._id.toString();
         this.title = listing.title;
@@ -9,16 +9,16 @@ class node {
 
 }
 
-class linkedList{
+class LinkedList{
     constructor(){
         this.head = null;
     }
 
     //  O(1) — insert at head (newest first)
     prepend(listing){
-        const node = new node(listing);
-        node.next = this.head;
-        this.head = node;
+        const newNode = new ListNode(listing);
+        newNode.next = this.head;
+        this.head = newNode;
     }
 
     deleteById(id){

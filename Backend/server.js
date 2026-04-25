@@ -3,12 +3,14 @@ const connectDB = require("./config/db");
 const passport = require("./config/passport");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors({ origin: ['https://devexpk.vercel.app', 'http://localhost:5173'], credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
