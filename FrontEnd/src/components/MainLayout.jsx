@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import DevExChatbot from './DevEXChatBot';
 import devexLogoDark from '../assets/DevEx_dark.webp';
@@ -71,12 +72,12 @@ const MainLayout = ({ children }) => {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
               )}
             </button>
-            <button className="text-[13px] font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
+            <Link to="/login" className="text-[13px] font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
               Login
-            </button>
-            <button className="bg-[var(--accent)] text-[var(--bg)] px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-all btn-premium">
+            </Link>
+            <Link to="/signup" className="bg-[var(--accent)] text-[var(--bg)] px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-all btn-premium">
               Sign up
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

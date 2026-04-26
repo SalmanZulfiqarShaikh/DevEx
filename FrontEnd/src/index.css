@@ -1,7 +1,16 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@theme {
+  --color-dark-bg: #0a0a0a;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --font-sans: "Inter", "Geist", sans-serif;
+  --background-image-bottom-glow: radial-gradient(circle at bottom, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  --background-image-dot-pattern: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E");
+}
+
 :root {
+  font-size: 16px; /* Explicitly set base font size */
   --text: #9ca3af;
   --text-h: #f3f4f6;
   --bg: #000000;

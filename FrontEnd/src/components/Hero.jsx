@@ -1,16 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 const Hero = ({ onBrowseClick }) => {
   const navigate = useNavigate();
-  const MOCK_USER = null;
+  const { user, role } = useAuth();
 
   const handleSellClick = () => {
-    if (MOCK_USER) {
+    if (user && role === 'seller') {
       navigate('/dashboard/seller');
     } else {
       navigate('/signup');
+    }
+  };
+
+  const handleBrowseClick = () => {
+    if (user && role === 'buyer') {
+      navigate('/dashboard/buyer');
+    } else {
+      onBrowseClick(); // Original scroll behavior
     }
   };
 
@@ -52,7 +61,7 @@ const Hero = ({ onBrowseClick }) => {
         >
           <div className="flex flex-col sm:flex-row gap-6">
             <button 
-              onClick={onBrowseClick} 
+              onClick={handleBrowseClick} 
               className="bg-[var(--accent)] text-[var(--bg)] px-10 py-4 rounded-xl font-bold hover:opacity-90 transition-all cursor-pointer btn-premium flex items-center gap-2 group"
             >
               Browse as Buyer

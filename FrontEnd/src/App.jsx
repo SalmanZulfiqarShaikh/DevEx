@@ -11,6 +11,10 @@ import Reviews from './components/Reviews'
 import Cookies from './components/Cookies'
 import TermsOfService from './components/TermsOfService'
 import Story from './components/Story'
+import Login from './components/Login'
+import Signup from './components/Signup'
+import BuyerDashboard from './components/BuyerDashboard'
+import SellerDashboard from './components/SellerDashboard'
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -48,6 +52,10 @@ function App() {
       <Route path="/cookies" element={<MainLayout><Cookies /></MainLayout>} />
       <Route path="/terms" element={<MainLayout><TermsOfService /></MainLayout>} />
       <Route path="/story" element={<MainLayout><Story /></MainLayout>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
+      <Route path="/dashboard/seller" element={<SellerDashboard />} />
       </Routes>
     </>
   )
