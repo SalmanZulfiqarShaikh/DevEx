@@ -1,7 +1,7 @@
 import api from '../utils/api';
 
 // Toggle this to false when you want to connect to your real Node.js backend
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 
 const authService = {
   login: async (credentials) => {
