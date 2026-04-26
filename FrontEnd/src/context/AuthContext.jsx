@@ -13,9 +13,14 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     const savedRole = localStorage.getItem('role');
     
-    if (savedUser && savedRole) {
-      setUser(JSON.parse(savedUser));
-      setRole(savedRole);
+    if (savedUser && savedRole && savedUser !== 'undefined') {
+      try {
+        setUser(JSON.parse(savedUser));
+        setRole(savedRole);
+      } catch (e) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('role');
+      }
     }
     setLoading(false);
   }, []);

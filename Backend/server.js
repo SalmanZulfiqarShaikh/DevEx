@@ -37,7 +37,7 @@ async function rebuildLinkedList() {
 rebuildLinkedList();
 
 app.get("/", (req, res) => {
-    res.send("welcm to devex bois!!!!!!!!");
+    res.send("welcm to devex bois!!!!!!! eosdoashiodasdod!");
 });
 
 app.listen(port, () => {
