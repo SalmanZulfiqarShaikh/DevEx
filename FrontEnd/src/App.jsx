@@ -16,6 +16,7 @@ import Signup from './components/Signup'
 import BuyerDashboard from './components/BuyerDashboard'
 import SellerDashboard from './components/SellerDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import NotFound from './components/NotFound'
 import { Analytics } from '@vercel/analytics/react';
 
 function ScrollToTop() {
@@ -62,6 +63,9 @@ function App() {
       <Route element={<ProtectedRoute allowedRoles={['seller']} />}>
         <Route path="/dashboard/seller" element={<SellerDashboard />} />
       </Route>
+      
+      {/* 404 Catch-All Route */}
+      <Route path="*" element={<NotFound />} />
       
       </Routes>
       <Analytics />
