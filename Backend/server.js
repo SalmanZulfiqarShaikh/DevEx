@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const listingRoutes  = require('./routes/listingRoutes');
 const linkedList     = require('./utils/linkedList');
-const Listing        = require('./models/Listing');
+const Listing        = require('./models/Listing/listing');
 dotenv.config();
 
 const app = express();
