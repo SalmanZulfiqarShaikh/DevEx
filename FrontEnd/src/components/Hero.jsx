@@ -15,12 +15,18 @@ const Hero = ({ onBrowseClick }) => {
     }
   };
 
-  const handleBrowseClick = () => {
-    if (user && role === 'buyer') {
-      navigate('/dashboard/buyer');
+  const handleBrowseBuyerClick = () => {
+    if (user) {
+      if (role === 'buyer') navigate('/dashboard/buyer');
+      else if (role === 'seller') navigate('/dashboard/seller');
     } else {
-      onBrowseClick(); // Original scroll behavior
+      navigate('/login'); // They asked 'login button takes to login, signup to signup' but what about buyer specifically? Let's just go to login or maybe buyer dashboard. Actually, they said "browse as guest should take directly to buyer dashboard". So if Browse as Buyer, take to login if not logged in.
     }
+  };
+
+  const handleBrowseGuestClick = () => {
+    // take directly to buyer dashboard, unauthenticated
+    navigate('/dashboard/buyer');
   };
 
   const fadeInUp = {
@@ -61,14 +67,16 @@ const Hero = ({ onBrowseClick }) => {
         >
           <div className="flex flex-col sm:flex-row gap-6">
             <button 
-              onClick={handleBrowseClick} 
+              onClick={() => {
+                if(user) {
+                  navigate(`/dashboard/${role}`);
+                } else {
+                  navigate('/login');
+                }
+              }} 
               className="bg-[var(--accent)] text-[var(--bg)] px-10 py-4 rounded-xl font-bold hover:opacity-90 transition-all cursor-pointer btn-premium flex items-center gap-2 group"
             >
               Browse as Buyer
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
             </button>
             <button 
               onClick={handleSellClick} 
@@ -78,7 +86,7 @@ const Hero = ({ onBrowseClick }) => {
             </button>
           </div>
           <button 
-            onClick={onBrowseClick} 
+            onClick={() => navigate('/dashboard/buyer')} 
             className="border border-[var(--border)] text-[var(--text)] px-8 py-3 rounded-xl font-bold hover:bg-[var(--accent-bg)] transition-all cursor-pointer btn-premium"
           >
             Browse as Guest
