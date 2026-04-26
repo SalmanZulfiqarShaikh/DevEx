@@ -15,6 +15,7 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import BuyerDashboard from './components/BuyerDashboard'
 import SellerDashboard from './components/SellerDashboard'
+import { Analytics } from '@vercel/analytics/react';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -56,7 +57,9 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
       <Route path="/dashboard/seller" element={<SellerDashboard />} />
+      
       </Routes>
+      <Analytics />
     </>
   )
 }
