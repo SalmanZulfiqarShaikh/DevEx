@@ -8,7 +8,7 @@ const registerUser = async ({ name, email, password, role }) => {
 
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await User.create({ name, email, passwordHash, role });
-    return generateToken(user);
+    return { token: generateToken(user), user, role: user.role };
 };
 
 const loginUser = async ({ email, password }) => {
@@ -19,7 +19,7 @@ const loginUser = async ({ email, password }) => {
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) throw new Error('Invalid credentials');
 
-    return { token: generateToken(user), role: user.role };
+    return { token: generateToken(user), user, role: user.role };
 };
 
 module.exports = { registerUser, loginUser };
