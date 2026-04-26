@@ -22,7 +22,8 @@ router.get('/google/callback',
     });
 
     // Redirect based on role
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const envUrl = process.env.FRONTEND_URL;
+    const frontendUrl = envUrl && envUrl.startsWith('http') ? envUrl : 'http://localhost:5173';
     if (req.user.role === 'seller') {
       res.redirect(`${frontendUrl}/dashboard/seller`);
     } else {

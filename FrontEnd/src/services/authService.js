@@ -20,9 +20,12 @@ const authService = {
       throw new Error('Invalid credentials');
     }
 
-    // Real API Call
-    const response = await api.post('/auth/login', credentials);
-    return response.data;
+    try {
+      const response = await api.post('/auth/login', credentials);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Login failed');
+    }
   },
 
   signup: async (userData) => {
@@ -35,9 +38,12 @@ const authService = {
       };
     }
 
-    // Real API Call
-    const response = await api.post('/auth/signup', userData);
-    return response.data;
+    try {
+      const response = await api.post('/auth/signup', userData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Signup failed');
+    }
   },
 
   logout: async () => {
