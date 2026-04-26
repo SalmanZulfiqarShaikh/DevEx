@@ -46,6 +46,7 @@ function HomePage() {
 function App() {
   return (
     <>
+<<<<<<< Updated upstream
       <ScrollToTop />
       <Routes>
       <Route path="/" element={<HomePage />} />
@@ -57,6 +58,9 @@ function App() {
       <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
       <Route path="/dashboard/seller" element={<SellerDashboard />} />
       </Routes>
+=======
+        <h1>DevnasnfasoasoEx</h1>
+>>>>>>> Stashed changes
     </>
   )
 }
