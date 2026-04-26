@@ -127,3 +127,17 @@ h3 {
 :root.light .logo {
   filter: invert(1);
 }
+
+.theme-logo-dark {
+  display: block;
+}
+.theme-logo-light {
+  display: none;
+}
+
+:root.light .theme-logo-dark {
+  display: none;
+}
+:root.light .theme-logo-light {
+  display: block;
+}
