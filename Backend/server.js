@@ -7,6 +7,7 @@ const cors = require('cors');
 const listingRoutes  = require('./routes/listingRoutes');
 const linkedList     = require('./utils/linkedList');
 const Listing        = require('./models/Listing/listing');
+const paymentRoutes  = require('./routes/paymentRoutes');
 dotenv.config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/auth',        require('./routes/oauth'));    // google oauth
 app.use('/dashboard/buyer', require('./routes/buyer')); // buyer dashboard routes
 app.use('/',            require('./routes/main'));     // logout
 app.use('/listing', listingRoutes)
+app.use('/payments',  paymentRoutes);
 
 async function rebuildLinkedList() {
   const listings = await Listing.find().sort({ createdAt: 1 }); // oldest first

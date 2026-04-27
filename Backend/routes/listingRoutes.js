@@ -2,7 +2,6 @@ const express = require('express');
 const router  = express.Router();
 const { createListing, getAllListings, getOneListing, updateListing, deleteListing }
   = require('../contollers/Listing/listingController');
-const isLoggedin = require('../middlewares/User/isLoggedin'); 
 
 router.get('/',        getAllListings);
 router.get('/:id',     getOneListing);
