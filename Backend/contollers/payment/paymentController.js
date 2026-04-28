@@ -1,6 +1,7 @@
 const queue    = require('../../utils/Queue');
 const Purchase = require('../../models/Purchases/purchases');
-const stripe   = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Listing  = require('../../models/Listing/listing');
+const stripe   = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 
 exports.enqueuePurchase = async (req, res) => {
   try {
