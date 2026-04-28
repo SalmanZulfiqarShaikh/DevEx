@@ -3,27 +3,10 @@ import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import DevExChatbot from './DevEXChatBot';
 import devexLogoDark from '../assets/DevEx_dark.webp';
+import { useTheme } from '../context/ThemeContext';
 
 const MainLayout = ({ children }) => {
-  // Initialize theme from localStorage or default to dark
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark';
-  });
-
-  // Apply theme class to document root
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans relative selection:bg-[var(--accent)] selection:text-[var(--bg)]">

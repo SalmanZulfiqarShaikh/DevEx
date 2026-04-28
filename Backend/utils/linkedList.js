@@ -1,12 +1,19 @@
 class ListNode {
     constructor(listing) {
-        this.listingId = listing._id.toString();
+        this._id = listing._id ? listing._id.toString() : null;
+        this.listingId = this._id;
         this.title = listing.title;
+        this.description = listing.description;
         this.price = listing.price;
-        this.sellerId = listing.sellerId.toString();
+        this.category = listing.category;
+        this.demoUrl = listing.demoUrl;
+        this.images = listing.images || [];
+        this.clicks = listing.clicks || 0;
+        this.shortId = listing.shortId || null;
+        this.sellerId = listing.sellerId ? listing.sellerId.toString() : null;
+        this.createdAt = listing.createdAt;
         this.next = null;
     }
-
 }
 
 class LinkedList{
