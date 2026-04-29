@@ -5,9 +5,19 @@ exports.addFavorite = async (req, res) => {
         const userId = req.user.id || req.user._id;
         const { listingId } = req.body;
 
-        // Check if already in favorites
-        const existing = await Favorites.findOne({ userId, listingId });
-        if (existing) return res.status(400).json({ error: "Already in favorites" });
+        if (!listingId) {
+            return res.status(400).json({ error: "Listing ID is required" });
+        }
+
+        // Check if already in favorites (Case-insensitive check for IDs just in case)
+        const existing = await Favorites.findOne({ 
+            userId: userId, 
+            listingId: listingId 
+        });
+
+        if (existing) {
+            return res.status(400).json({ error: "Already in favorites" });
+        }
 
         const favorite = await Favorites.create({ userId, listingId });
         res.status(201).json(favorite);

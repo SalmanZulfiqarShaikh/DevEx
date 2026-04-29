@@ -21,6 +21,7 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('latest'); 
   const [categoryOption, setCategoryOption] = useState('');
+  const [processingFavs, setProcessingFavs] = useState({});
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -66,18 +67,25 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
   };
 
   const toggleFavorite = async (listingId) => {
+    if (processingFavs[listingId]) return;
+
     try {
+      setProcessingFavs(prev => ({ ...prev, [listingId]: true }));
+      
       const isFav = favorites.some(f => f.listingId?._id === listingId);
       if (isFav) {
         await axios.delete(`http://localhost:3000/favorites/${listingId}`, { withCredentials: true });
       } else {
         await axios.post('http://localhost:3000/favorites', { listingId }, { withCredentials: true });
       }
+      
       // Refresh favorites
       const favRes = await axios.get('http://localhost:3000/favorites', { withCredentials: true });
       setFavorites(favRes.data);
     } catch (err) {
       console.error("Error toggling favorite:", err);
+    } finally {
+      setProcessingFavs(prev => ({ ...prev, [listingId]: false }));
     }
   };
 
@@ -183,6 +191,7 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
                     )}
                     
                     <button 
+                      disabled={processingFavs[listing._id]}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -192,9 +201,11 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
                           toggleFavorite(listing._id);
                         }
                       }}
-                      className="absolute top-4 right-4 p-2 bg-black/40 hover:bg-black/60 rounded-xl text-white transition-all shadow-md"
+                      className={`absolute top-4 right-4 p-2 rounded-xl text-white transition-all shadow-md ${
+                        processingFavs[listing._id] ? 'bg-gray-500/50 cursor-not-allowed' : 'bg-black/40 hover:bg-black/60'
+                      }`}
                     >
-                      <Heart size={16} className={isFav ? 'fill-red-500 text-red-500' : ''} />
+                      <Heart size={16} className={`${isFav ? 'fill-red-500 text-red-500' : ''} ${processingFavs[listing._id] ? 'animate-pulse' : ''}`} />
                     </button>
                   </div>
 
@@ -275,8 +286,14 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
                     <h4 className="font-bold group-hover:text-[var(--accent)] transition-colors">{fav.listingId?.title}</h4>
                     <span className="text-xs text-[var(--accent)] font-bold">{fav.listingId?.category}</span>
                   </Link>
-                  <button onClick={() => toggleFavorite(fav.listingId?._id)} className="text-xs font-bold text-red-500 hover:underline">
-                    Remove
+                  <button 
+                    disabled={processingFavs[fav.listingId?._id]}
+                    onClick={() => toggleFavorite(fav.listingId?._id)} 
+                    className={`text-xs font-bold transition-colors ${
+                      processingFavs[fav.listingId?._id] ? 'text-gray-500 cursor-not-allowed' : 'text-red-500 hover:underline'
+                    }`}
+                  >
+                    {processingFavs[fav.listingId?._id] ? 'Removing...' : 'Remove'}
                   </button>
                 </div>
               ))}
