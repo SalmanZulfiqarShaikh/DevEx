@@ -24,5 +24,10 @@ const isBuyer = (req, res, next) => {
         return res.status(403).json({ message: 'Buyers only' });
     next();
 };
+const isAdmin = (req, res, next) => {
+    if (req.user?.role !== 'admin') 
+        return res.status(403).json({ message: 'Admins only' });
+    next();
+};
 
-module.exports = { isLoggedIn, isSeller, isBuyer };
+module.exports = { isLoggedIn, isSeller, isBuyer, isAdmin };

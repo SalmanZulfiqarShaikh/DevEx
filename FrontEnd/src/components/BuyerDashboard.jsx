@@ -90,23 +90,65 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
   };
 
   if (loading) {
-    return <div className="p-12 text-gray-400 font-bold">Loading marketplace...</div>;
+    return (
+      <div className="p-4 md:p-8 min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-300">
+        {/* Header bar Skeleton */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 md:mb-10 pb-6 border-b border-gray-500/20">
+          <div className="h-8 bg-gray-500/20 rounded-xl w-48 animate-pulse hidden md:block"></div>
+          <div className="h-12 bg-gray-500/20 rounded-2xl w-full md:max-w-xl animate-pulse"></div>
+          <div className="h-10 bg-gray-500/20 rounded-xl w-12 animate-pulse self-end md:self-auto"></div>
+        </div>
+
+        {/* Filters Bar Skeleton */}
+        <div className="flex flex-wrap items-center gap-4 mb-10">
+          <div className="h-6 bg-gray-500/20 rounded w-20 animate-pulse"></div>
+          <div className="h-10 bg-gray-500/20 rounded-xl w-32 animate-pulse"></div>
+          <div className="h-10 bg-gray-500/20 rounded-xl w-32 animate-pulse"></div>
+        </div>
+
+        {/* Posts Feed Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="p-6 rounded-3xl border border-[var(--border)] bg-[var(--accent-bg)] flex flex-col justify-between relative shadow-lg animate-pulse">
+              <div>
+                <div className="aspect-video rounded-2xl bg-gray-500/20 mb-6"></div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-6 h-6 rounded-full bg-gray-500/20"></div>
+                  <div className="h-4 bg-gray-500/20 rounded w-24"></div>
+                  <div className="h-4 bg-gray-500/20 rounded w-16 ml-auto"></div>
+                </div>
+                <div className="h-6 bg-gray-500/20 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-full mb-2"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-2/3 mb-6"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t border-gray-500/10">
+                <div>
+                  <div className="h-3 bg-gray-500/20 rounded w-16 mb-1"></div>
+                  <div className="h-6 bg-gray-500/20 rounded w-24"></div>
+                </div>
+                <div className="h-4 bg-gray-500/20 rounded w-12"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-8 min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-300">
+    <div className="p-4 md:p-8 min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-300">
       {/* Header bar */}
-      <div className="flex justify-between items-center mb-10 pb-6 border-b border-gray-500/20">
-        <div className="w-1/4 text-xl font-bold tracking-tight hidden md:block">DevEx Market</div>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 md:mb-10 pb-6 border-b border-gray-500/20">
+        <div className="text-xl font-bold tracking-tight hidden md:block w-1/4">DevEx Market</div>
 
         {/* Search Bar (YouTube style) */}
-        <form onSubmit={handleSearchSubmit} className="flex w-full md:max-w-xl flex-1 mx-auto shadow-sm">
+        <form onSubmit={handleSearchSubmit} className="flex w-full md:max-w-xl flex-1 shadow-sm">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search SaaS applications..."
-            className="flex-1 px-4 py-2.5 rounded-l-2xl focus:outline-none focus:ring-1 focus:ring-[var(--accent)] border border-[var(--border)] bg-[var(--accent-bg)] text-[var(--text-h)]"
+            className="flex-1 px-4 py-2.5 rounded-l-2xl focus:outline-none focus:ring-1 focus:ring-[var(--accent)] border border-[var(--border)] bg-[var(--accent-bg)] text-[var(--text-h)] text-sm"
           />
           <button 
             type="submit"
@@ -117,7 +159,7 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
         </form>
 
         {/* Toggles & Icons */}
-        <div className="w-1/4 flex justify-end items-center gap-6">
+        <div className="w-full md:w-1/4 flex justify-end items-center gap-6">
           {/* Favorites/Cart Icon */}
           <button 
             onClick={() => {

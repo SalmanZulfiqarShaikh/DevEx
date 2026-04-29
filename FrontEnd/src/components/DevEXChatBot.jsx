@@ -71,7 +71,7 @@ Description:
 DevEx is a high-performance marketplace designed for buying and selling Micro-SaaS projects. Built with a focus on System Design, Security, and Scalable Architecture. It implements backend concepts used in real-world production environments.
 
 Academic Context:
-Developed as a core Final Year Project (FYP) for the Data Structures (3rd Semester) curriculum at UBIT, University of Karachi. It is a student-built, student-driven platform — representing the best of what UBIT has to offer.
+Developed as a core Project for the Data Structures (3rd Semester) curriculum at UBIT, University of Karachi. It is a student-built, student-driven platform — representing the best of what UBIT has to offer.
 
 Mission:
 "Bridging the Gap Between Vision & Exit."

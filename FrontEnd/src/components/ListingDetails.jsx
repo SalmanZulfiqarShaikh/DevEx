@@ -70,8 +70,49 @@ const ListingDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center text-gray-400 font-bold">
-        Loading listing...
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] pb-20 relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-12 relative z-10">
+          {/* Back Button Skeleton */}
+          <div className="h-4 bg-gray-500/20 rounded w-32 animate-pulse mb-8"></div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Visuals/Carousel Skeleton */}
+            <div className="flex flex-col gap-4 animate-pulse">
+              <div className="aspect-video rounded-2xl bg-gray-500/20 border border-[var(--border)]"></div>
+              <div className="flex gap-3 mt-2">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="w-20 h-20 rounded-2xl bg-gray-500/20 flex-shrink-0"></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Info Skeleton */}
+            <div className="bg-[var(--accent-bg)] border border-[var(--border)] p-4 md:p-8 rounded-2xl space-y-6 animate-pulse">
+              <div className="h-6 bg-gray-500/20 rounded-full w-24"></div>
+              <div className="h-10 bg-gray-500/20 rounded w-3/4"></div>
+              <div className="space-y-2">
+                <div className="h-4 bg-gray-500/20 rounded w-full"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-full"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-2/3"></div>
+              </div>
+              <div className="h-16 bg-gray-500/20 rounded-xl w-full"></div>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex-1 h-14 bg-gray-500/20 rounded-2xl"></div>
+                <div className="flex-1 h-14 bg-gray-500/20 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Long Description Block Skeleton */}
+          <div className="mt-12 bg-[var(--accent-bg)] border border-[var(--border)] p-4 md:p-12 rounded-2xl animate-pulse">
+            <div className="h-4 bg-gray-500/20 rounded w-48 mb-6"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-500/20 rounded w-full"></div>
+              <div className="h-4 bg-gray-500/20 rounded w-full"></div>
+              <div className="h-4 bg-gray-500/20 rounded w-4/5"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -89,7 +130,7 @@ const ListingDetails = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans pb-20 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 pt-12 relative z-10">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-12 relative z-10">
         {/* Back Button */}
         <button 
           onClick={() => navigate(-1)} 
@@ -129,7 +170,7 @@ const ListingDetails = () => {
           </div>
 
           {/* Right: Info */}
-          <div className="bg-[var(--accent-bg)] border border-[var(--border)] p-8 rounded-2xl space-y-6">
+          <div className="bg-[var(--accent-bg)] border border-[var(--border)] p-4 md:p-8 rounded-2xl space-y-6">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded-full text-[10px] font-bold uppercase tracking-widest border border-[var(--accent)]/20 shadow-sm">
                 {listing.category}
@@ -170,7 +211,7 @@ const ListingDetails = () => {
         </div>
 
         {/* Long Description Block */}
-        <div className="mt-12 bg-[var(--accent-bg)] border border-[var(--border)] p-8 md:p-12 rounded-2xl">
+        <div className="mt-12 bg-[var(--accent-bg)] border border-[var(--border)] p-4 md:p-12 rounded-2xl">
           <h2 className="text-sm font-bold text-[var(--accent)] uppercase tracking-widest mb-6 border-b border-[var(--border)] pb-4">
             Detailed Product Overview
           </h2>

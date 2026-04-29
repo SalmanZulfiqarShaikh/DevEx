@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-import { Send, User, MessageSquare } from 'lucide-react';
+import { Send, User, MessageSquare, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const socket = io('http://localhost:3000', { withCredentials: true, autoConnect: false });
@@ -119,9 +119,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="h-screen bg-[var(--bg)] flex border-l border-[var(--border)]">
+    <div className="h-[calc(100vh-8rem)] md:h-screen bg-[var(--bg)] flex border-l border-[var(--border)] relative">
       {/* Contacts List */}
-      <div className="w-80 border-r border-[var(--border)] flex flex-col bg-[var(--accent-bg)]">
+      <div className={`${selectedContact ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-r border-[var(--border)] flex-col bg-[var(--accent-bg)] h-full`}>
         <div className="h-16 flex items-center px-6 border-b border-[var(--border)] font-bold text-[var(--text-h)] text-sm tracking-widest uppercase">
           Messages
         </div>
@@ -166,12 +166,20 @@ const Chat = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className={`${selectedContact ? 'flex' : 'hidden md:flex'} flex-1 flex-col h-full bg-black/5`}>
         {selectedContact ? (
           <>
             {/* Header */}
-            <div className="h-16 flex items-center px-8 border-b border-[var(--border)] bg-[var(--bg)]">
-              <div className="flex items-center gap-3">
+            <div className="h-16 flex items-center px-4 md:px-8 border-b border-[var(--border)] bg-[var(--bg)]">
+              <div className="flex items-center gap-3 w-full">
+                {/* Back Button for Mobile */}
+                <button 
+                  onClick={() => setSelectedContact(null)}
+                  className="p-2 -ml-2 rounded-xl text-gray-500 hover:text-[var(--text-h)] hover:bg-white/[0.05] md:hidden"
+                >
+                  <ArrowLeft size={20} />
+                </button>
+
                 <div className="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] font-bold text-sm overflow-hidden">
                   {selectedContact.profilePic ? (
                     <img src={selectedContact.profilePic} alt="" className="w-full h-full object-cover" />
@@ -187,11 +195,11 @@ const Chat = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-8 space-y-4 bg-black/10 flex flex-col">
+            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 bg-black/10 flex flex-col">
               {messages.map((msg, i) => {
                 const isMine = String(msg.senderId) === String(user._id || user.id);
                 return (
-                  <div key={msg._id || i} className={`flex items-end gap-2 max-w-[75%] ${isMine ? 'self-end flex-row-reverse' : 'self-start'}`}>
+                  <div key={msg._id || i} className={`flex items-end gap-2 max-w-[85%] md:max-w-[75%] ${isMine ? 'self-end flex-row-reverse' : 'self-start'}`}>
                     <div className="w-6 h-6 rounded-full bg-[var(--accent-bg)] border border-[var(--border)] flex items-center justify-center text-[10px] font-bold text-[var(--accent)] overflow-hidden flex-shrink-0">
                       {isMine ? (
                         user?.profilePic ? (
@@ -207,7 +215,7 @@ const Chat = () => {
                         )
                       )}
                     </div>
-                    <div className={`max-w-xs md:max-w-md p-3.5 rounded-2xl text-sm leading-relaxed ${
+                    <div className={`max-w-xs md:max-w-md p-3 md:p-3.5 rounded-2xl text-sm leading-relaxed ${
                       isMine 
                       ? 'bg-[var(--accent)] text-[var(--bg)] font-medium rounded-br-none shadow-lg' 
                       : 'bg-[var(--accent-bg)] text-[var(--text-h)] border border-[var(--border)] rounded-bl-none'
@@ -221,7 +229,7 @@ const Chat = () => {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-[var(--border)] bg-[var(--bg)] flex gap-4">
+            <form onSubmit={handleSendMessage} className="p-3 md:p-4 border-t border-[var(--border)] bg-[var(--bg)] flex gap-2 md:gap-4">
               <input
                 type="text"
                 value={newMessage}

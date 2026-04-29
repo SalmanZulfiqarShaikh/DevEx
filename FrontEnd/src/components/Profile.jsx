@@ -47,7 +47,7 @@ const Profile = () => {
   const picSrc = userProfilePic ? (userProfilePic.startsWith('http') ? userProfilePic : `http://localhost:3000${userProfilePic}`) : null;
 
   return (
-    <div className="p-8 max-w-md mx-auto mt-12 flex flex-col justify-center min-h-[60vh] relative">
+    <div className="p-4 md:p-8 max-w-md mx-auto mt-4 md:mt-12 flex flex-col justify-center min-h-[60vh] relative">
       <div className="flex flex-col items-center mb-8">
         <div className="w-24 h-24 rounded-full border border-gray-500/20 overflow-hidden bg-black/30 flex items-center justify-center relative shadow-xl mb-4 group cursor-pointer">
           {picSrc ? (
@@ -62,7 +62,7 @@ const Profile = () => {
         <p className="text-xs text-gray-400 mt-1">Manage details for your account</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-[var(--accent-bg)] p-8 rounded-3xl border border-gray-500/10 shadow-2xl">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-[var(--accent-bg)] p-4 md:p-8 rounded-3xl border border-gray-500/10 shadow-2xl">
         <div>
           <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Display Name</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full bg-[var(--bg)] border border-gray-500/20 text-[var(--text-h)] px-4 py-3 rounded-xl focus:outline-none focus:border-[var(--accent)]/50 transition-colors text-sm" />

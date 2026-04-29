@@ -143,18 +143,68 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
     }
   };
 
-  if (loading) return <div className="p-12 text-gray-500 font-bold">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="p-4 md:p-8 min-h-screen bg-[var(--bg)] text-[var(--text)]">
+        {/* Header bar Skeleton */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-10 pb-6 border-b border-gray-500/10">
+          <div>
+            <div className="h-8 bg-gray-500/20 rounded-xl w-48 animate-pulse mb-2"></div>
+            <div className="h-4 bg-gray-500/20 rounded w-64 animate-pulse"></div>
+          </div>
+          <div className="h-12 bg-gray-500/20 rounded-xl w-full sm:w-40 animate-pulse"></div>
+        </div>
+
+        {/* Stats Grid Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="p-6 rounded-3xl border border-gray-500/10 bg-[var(--accent-bg)] flex items-center justify-between animate-pulse">
+              <div>
+                <div className="h-8 bg-gray-500/20 rounded w-24 mb-2"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-16"></div>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-gray-500/20"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Last Posts Skeleton */}
+        <div className="mt-12">
+          <div className="flex justify-between items-center mb-6">
+            <div className="h-6 bg-gray-500/20 rounded w-32 animate-pulse"></div>
+            <div className="h-4 bg-gray-500/20 rounded w-16 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="p-6 border border-gray-500/10 rounded-3xl bg-[var(--accent-bg)] animate-pulse">
+                <div className="h-32 rounded-2xl bg-gray-500/20 mb-4"></div>
+                <div className="h-5 bg-gray-500/20 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-500/20 rounded w-1/4 mb-4"></div>
+                <div className="flex gap-2">
+                  <div className="flex-1 h-8 bg-gray-500/20 rounded-xl"></div>
+                  <div className="flex-1 h-8 bg-gray-500/20 rounded-xl"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const approvedListings = myListings.filter(l => l.isApproved);
+  const pendingListings = myListings.filter(l => !l.isApproved);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {activeTab === 'overview' && (
         <>
-          <div className="flex justify-between items-center mb-10 pb-6 border-b border-gray-500/10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-10 pb-6 border-b border-gray-500/10">
             <div>
-              <h1 className="text-3xl font-bold">Seller Dashboard</h1>
-              <p className="text-gray-500">Welcome, {user?.name}. Manage listings securely.</p>
+              <h1 className="text-2xl md:text-3xl font-bold">Seller Dashboard</h1>
+              <p className="text-xs md:text-sm text-gray-500">Welcome, {user?.name}. Manage listings securely.</p>
             </div>
-            <button onClick={() => navigate('/dashboard/seller/create')} className="px-6 py-3 bg-[var(--accent)] text-[var(--bg)] font-bold rounded-xl hover:opacity-90 transition-all flex items-center gap-2">
+            <button onClick={() => navigate('/dashboard/seller/create')} className="w-full sm:w-auto px-6 py-3 bg-[var(--accent)] text-[var(--bg)] font-bold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 text-sm">
               <Plus size={18} /> List New SaaS
             </button>
           </div>
@@ -170,27 +220,61 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
 
             <div className="p-6 rounded-3xl border border-gray-500/10 bg-[var(--accent-bg)] flex items-center justify-between">
               <div>
-                <div className="text-3xl font-bold">{myListings.length}</div>
+                <div className="text-3xl font-bold">{approvedListings.length}</div>
                 <span className="text-xs text-gray-400">Active Listings</span>
               </div>
               <BarChart3 size={24} className="text-blue-500" />
             </div>
           </div>
 
+          {/* Pending Approvals Section */}
+          {pendingListings.length > 0 && (
+            <div className="mt-8 mb-12">
+              <h2 className="text-xl font-bold mb-6 text-yellow-500 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                Pending Approvals ({pendingListings.length})
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {pendingListings.map((l) => (
+                  <div key={l._id} className="p-6 border border-yellow-500/20 rounded-3xl bg-[var(--accent-bg)] relative group overflow-hidden">
+                    <div className="h-32 rounded-2xl bg-black/10 overflow-hidden mb-4 relative">
+                      {l.images && l.images.length > 0 ? (
+                        <img src={l.images[0]} alt="" className="w-full h-full object-cover opacity-70" />
+                      ) : (
+                        <span className="flex items-center justify-center h-full text-3xl font-bold opacity-30">{l.title?.charAt(0)}</span>
+                      )}
+                      <span className="absolute top-3 right-3 px-2 py-1 bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 rounded-lg text-[10px] font-bold uppercase tracking-wider">Pending</span>
+                    </div>
+                    <h4 className="font-bold text-[var(--text-h)] mb-1 truncate">{l.title}</h4>
+                    <p className="text-sm text-[var(--accent)] font-bold mb-4">${l.price?.toLocaleString()}</p>
+                    <div className="flex gap-2">
+                      <button onClick={() => openEditModal(l)} className="flex-1 py-2 bg-white/5 border border-gray-500/10 hover:border-blue-500/30 text-xs font-bold rounded-xl text-blue-400 hover:bg-blue-500/10 transition-colors">
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteListing(l._id)} className="flex-1 py-2 bg-white/5 border border-gray-500/10 hover:border-red-500/30 text-xs font-bold rounded-xl text-red-400 hover:bg-red-500/10 transition-colors">
+                        Take Down
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Last Posts Preview */}
           <div className="mt-12">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Your Last Posts</h2>
+              <h2 className="text-xl font-bold">Your Approved Posts</h2>
               <button onClick={() => navigate('/dashboard/seller/posts')} className="text-xs font-bold text-[var(--accent)] hover:underline flex items-center gap-1">
                 View All <ArrowUpRight size={14} />
               </button>
             </div>
 
-            {myListings.length === 0 ? (
-              <p className="text-sm text-gray-500">No listings posted yet.</p>
+            {approvedListings.length === 0 ? (
+              <p className="text-sm text-gray-500">No approved listings yet.</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {myListings.slice(0, 3).map((l) => (
+                {approvedListings.slice(0, 3).map((l) => (
                   <div key={l._id} className="p-6 border border-gray-500/10 rounded-3xl bg-[var(--accent-bg)] relative group overflow-hidden">
                     <div className="h-32 rounded-2xl bg-black/10 overflow-hidden mb-4 relative">
                       {l.images && l.images.length > 0 ? (
@@ -218,7 +302,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
       )}
 
       {activeTab === 'create' && (
-        <form onSubmit={handleFormSubmit} className="max-w-2xl mx-auto bg-[var(--accent-bg)] p-8 rounded-3xl space-y-6">
+        <form onSubmit={handleFormSubmit} className="max-w-2xl mx-auto bg-[var(--accent-bg)] p-4 md:p-8 rounded-3xl space-y-6">
           <h2 className="text-2xl font-bold text-center">Post New SaaS Opportunity</h2>
           
           <div>
@@ -290,16 +374,21 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
       {activeTab === 'posts' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {myListings.map((l) => (
-            <div key={l._id} className="p-6 border border-gray-500/10 rounded-2xl bg-[var(--accent-bg)] flex items-center gap-4">
-              <div className="w-16 h-16 rounded-xl bg-black/10 overflow-hidden">
+            <div key={l._id} className={`p-6 border rounded-2xl bg-[var(--accent-bg)] flex items-center gap-4 ${l.isApproved ? 'border-gray-500/10' : 'border-yellow-500/20'}`}>
+              <div className="w-16 h-16 rounded-xl bg-black/10 overflow-hidden relative flex-shrink-0">
                 {l.images && l.images.length > 0 ? (
                   <img src={l.images[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <span className="flex items-center justify-center h-full text-2xl font-bold opacity-30">{l.title?.charAt(0)}</span>
                 )}
               </div>
-              <div className="flex-1">
-                <h4 className="font-bold mb-1">{l.title}</h4>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="font-bold truncate text-[var(--text-h)]">{l.title}</h4>
+                  <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider ${l.isApproved ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'}`}>
+                    {l.isApproved ? 'Approved' : 'Pending'}
+                  </span>
+                </div>
                 <p className="text-sm text-[var(--accent)] font-bold mb-3">${l.price?.toLocaleString()}</p>
                 <div className="flex gap-2">
                   <button onClick={() => openEditModal(l)} className="px-3 py-1 bg-white/5 border border-gray-500/10 hover:border-blue-500/30 text-xs font-bold rounded-lg text-blue-400 hover:bg-blue-500/10 transition-colors">

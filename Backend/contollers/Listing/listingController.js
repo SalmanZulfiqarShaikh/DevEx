@@ -37,7 +37,13 @@ exports.createListing = async (req, res) => {
 exports.getAllListings = async (req, res) => {
   try {
     const { q, min, max, sellerId, category, sort } = req.query;
-    let query = Listing.find().populate('sellerId', 'name profilePic');
+    let filter = { isApproved: true };
+    
+    if (sellerId) {
+      filter = { sellerId };
+    }
+
+    let query = Listing.find(filter).populate('sellerId', 'name profilePic');
 
     let listings = await query;
     
@@ -55,6 +61,7 @@ exports.getAllListings = async (req, res) => {
       sellerId: l.sellerId?._id,
       sellerName: l.sellerId?.name || 'Verified Founder',
       sellerProfilePic: l.sellerId?.profilePic,
+      isApproved: l.isApproved,
       createdAt: l.createdAt
     }));
 

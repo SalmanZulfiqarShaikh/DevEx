@@ -22,6 +22,8 @@ import DashboardLayout from './components/DashboardLayout'
 import ListingDetails from './components/ListingDetails'
 import Chat from './components/Chat'
 import Profile from './components/Profile'
+import AdminLogin from './components/AdminLogin'
+import AdminDashboard from './components/AdminDashboard'
 import { Analytics } from '@vercel/analytics/react';
 
 function ScrollToTop() {
@@ -75,6 +77,7 @@ function App() {
       <Route path="/story" element={<MainLayout><Story /></MainLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/admin-login" element={<AdminLogin />} />
       <Route path="/listing/:id" element={<ListingDetails />} />
       
       <Route path="/dashboard/buyer" element={<DashboardLayout><BuyerDashboard /></DashboardLayout>} />
@@ -89,6 +92,11 @@ function App() {
         <Route path="/dashboard/seller" element={<DashboardLayout><SellerDashboard /></DashboardLayout>} />
         <Route path="/dashboard/seller/create" element={<DashboardLayout><SellerDashboard activeTab="create" /></DashboardLayout>} />
         <Route path="/dashboard/seller/posts" element={<DashboardLayout><SellerDashboard activeTab="posts" /></DashboardLayout>} />
+      </Route>
+
+      {/* Admin Protected Routes */}
+      <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
       </Route>
 
       {/* Shared Protected Chat/Profile */}

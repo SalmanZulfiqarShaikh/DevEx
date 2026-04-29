@@ -40,6 +40,7 @@ app.use('/auth',        require('./routes/oauth'));    // google oauth
 app.use('/dashboard/buyer', require('./routes/buyer')); // buyer dashboard routes
 app.use('/',            require('./routes/main'));     // logout
 app.use('/listing', listingRoutes)
+app.use('/admin', require('./routes/adminRoutes'));
 app.use('/payments',  paymentRoutes);
 app.use('/purchases', require('./routes/purchaseRoutes'));
 app.use('/chat', require('./routes/chatRoutes'));

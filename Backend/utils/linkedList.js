@@ -12,6 +12,7 @@ class ListNode {
         this.shortId = listing.shortId || null;
         this.sellerId = listing.sellerId ? listing.sellerId.toString() : null;
         this.createdAt = listing.createdAt;
+        this.isApproved = listing.isApproved || false;
         this.next = null;
     }
 }
