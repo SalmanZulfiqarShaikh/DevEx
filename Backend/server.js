@@ -36,6 +36,7 @@ connectDB();
 // Routes
 app.use('/auth/signup', require('./routes/signup'));
 app.use('/auth/login',  require('./routes/login'));
+app.use('/auth/password', require('./routes/passwordRoutes'));
 app.use('/auth',        require('./routes/oauth'));    // google oauth
 app.use('/dashboard/buyer', require('./routes/buyer')); // buyer dashboard routes
 app.use('/',            require('./routes/main'));     // logout

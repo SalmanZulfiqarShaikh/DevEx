@@ -29,7 +29,7 @@ const Signup = () => {
     try {
       const result = await signup({ ...formData, role });
       if (result.success) {
-        navigate(`/dashboard/${result.role}`);
+        navigate('/verify-otp', { state: { email: formData.email } });
       }
     } catch (err) {
       setError(err.message || 'Signup failed. Please try again.');

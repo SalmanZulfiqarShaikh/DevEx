@@ -14,6 +14,9 @@ import TermsOfService from './components/TermsOfService'
 import Story from './components/Story'
 import Login from './components/Login'
 import Signup from './components/Signup'
+import OTPVerification from './components/OTPVerification'
+import ForgotPassword from './components/ForgotPassword'
+import ResetPassword from './components/ResetPassword'
 import BuyerDashboard from './components/BuyerDashboard'
 import SellerDashboard from './components/SellerDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -75,6 +78,9 @@ function App() {
       <Route path="/story" element={<MainLayout><Story /></MainLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify-otp" element={<OTPVerification />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/listing/:id" element={<ListingDetails />} />
       
       <Route path="/dashboard/buyer" element={<DashboardLayout><BuyerDashboard /></DashboardLayout>} />

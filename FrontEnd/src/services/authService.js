@@ -46,6 +46,33 @@ const authService = {
     }
   },
 
+  verifyOTP: async (email, otp) => {
+    try {
+      const response = await api.post('/auth/signup/verify', { email, otp });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Verification failed');
+    }
+  },
+
+  forgotPassword: async (email) => {
+    try {
+      const response = await api.post('/auth/password/forgot-password', { email });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to send recovery email');
+    }
+  },
+
+  resetPassword: async (resetData) => {
+    try {
+      const response = await api.post('/auth/password/reset-password', resetData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to reset password');
+    }
+  },
+
   logout: async () => {
     if (MOCK_MODE) {
       return { success: true };
