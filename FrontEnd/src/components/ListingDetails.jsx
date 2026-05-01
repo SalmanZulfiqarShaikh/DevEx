@@ -123,6 +123,7 @@ const ListingDetails = () => {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans pb-20 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-12 relative z-10">
         {/* Back Button */}
@@ -285,6 +286,7 @@ const ListingDetails = () => {
         }}
       />
     )}
+  </>
   );
 };
 
