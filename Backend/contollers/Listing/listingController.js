@@ -47,23 +47,36 @@ exports.getAllListings = async (req, res) => {
 
     let listings = await query;
     
-    let results = listings.map(l => ({
-      _id: l._id,
-      shortId: l.shortId,
-      title: l.title,
-      description: l.description,
-      longDescription: l.longDescription,
-      price: l.price,
-      category: l.category,
-      images: l.images,
-      demoUrl: l.demoUrl,
-      clicks: l.clicks,
-      sellerId: l.sellerId?._id,
-      sellerName: l.sellerId?.name || 'Verified Founder',
-      sellerProfilePic: l.sellerId?.profilePic,
-      isApproved: l.isApproved,
-      createdAt: l.createdAt
-    }));
+    const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    let results = listings
+      .filter(l => {
+        // Seller fetching own listings sees everything (including sold)
+        if (sellerId) return true;
+        // Hide listings sold more than 10 days ago from public browse
+        if (l.isSold && l.soldAt && (now - new Date(l.soldAt).getTime()) > TEN_DAYS_MS) return false;
+        return true;
+      })
+      .map(l => ({
+        _id: l._id,
+        shortId: l.shortId,
+        title: l.title,
+        description: l.description,
+        longDescription: l.longDescription,
+        price: l.price,
+        category: l.category,
+        images: l.images,
+        demoUrl: l.demoUrl,
+        clicks: l.clicks,
+        sellerId: l.sellerId?._id,
+        sellerName: l.sellerId?.name || 'Verified Founder',
+        sellerProfilePic: l.sellerId?.profilePic,
+        isApproved: l.isApproved,
+        isSold: l.isSold || false,
+        soldAt: l.soldAt || null,
+        createdAt: l.createdAt
+      }));
 
     if (q) {
       results = results.filter(l =>

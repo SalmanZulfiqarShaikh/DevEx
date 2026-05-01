@@ -10,7 +10,9 @@ import {
   ShieldCheck,
   Globe,
   Sun,
-  Moon
+  Moon,
+  CreditCard,
+  BarChart2
 } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -57,10 +59,12 @@ const DashboardLayout = ({ children }) => {
     },
     ...(isSeller ? [
       { name: 'Create Post', icon: PlusSquare, path: '/dashboard/seller/create' },
-      { name: 'Last Posts', icon: ShoppingBag, path: '/dashboard/seller/posts' }
+      { name: 'Last Posts', icon: ShoppingBag, path: '/dashboard/seller/posts' },
+      { name: 'Analytics', icon: BarChart2, path: '/dashboard/seller/analytics' },
     ] : [
       { name: 'Last Buys', icon: ShoppingBag, path: '/dashboard/buyer/buys' }
     ]),
+    { name: 'Payment', icon: CreditCard, path: isSeller ? '/dashboard/seller/payment' : '/dashboard/buyer/payment' },
     { name: 'Chats', icon: MessageSquare, path: '/chat' },
     { name: 'Edit Profile', icon: User, path: '/profile' }
   ];
@@ -205,7 +209,7 @@ const DashboardLayout = ({ children }) => {
                 )}
               </div>
               <span className="text-[9px] font-bold tracking-wider truncate max-w-[64px]">
-                {item.name.replace('Overview', 'Home').replace('Create Post', 'Create').replace('Last Posts', 'Posts').replace('Last Buys', 'Buys').replace('Edit Profile', 'Profile')}
+                {item.name.replace('Overview', 'Home').replace('Create Post', 'Create').replace('Last Posts', 'Posts').replace('Last Buys', 'Buys').replace('Edit Profile', 'Profile').replace('Analytics', 'Stats').replace('Payment', 'Pay')}
               </span>
             </button>
           );

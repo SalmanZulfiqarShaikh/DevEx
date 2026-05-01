@@ -22,7 +22,14 @@ const registerUser = async ({ name, email, password, role }) => {
             existing.role = role;
             await existing.save();
 
-            await sendEmail(email, 'Your DevEx Verification Code', `Your new verification code is: ${otp}\nIt expires in 5 minutes.`);
+            await sendEmail(email, 'Your DevEx Verification Code', `
+                <p>Hey ${name},</p>
+                <p>Here's your new DevEx verification code:</p>
+                <p style="font-size:28px;font-weight:bold;letter-spacing:6px;">${otp}</p>
+                <p>This code expires in <strong>5 minutes</strong>. Do not share it with anyone.</p>
+                <br/>
+                <p>Regards,<br/><strong>Team DevEx</strong><br/><em>Acquire the Future of Micro-SaaS.</em></p>
+            `);
             return { success: true, message: "OTP sent to email", email: existing.email };
         }
     }
@@ -39,7 +46,14 @@ const registerUser = async ({ name, email, password, role }) => {
         isVerified: false 
     });
 
-    await sendEmail(email, 'Your DevEx Verification Code', `Your verification code is: ${otp}\nIt expires in 5 minutes.`);
+    await sendEmail(email, 'Your DevEx Verification Code', `
+        <p>Hey ${name},</p>
+        <p>Welcome to <strong>DevEx</strong>! To complete your signup, use the verification code below:</p>
+        <p style="font-size:28px;font-weight:bold;letter-spacing:6px;">${otp}</p>
+        <p>This code expires in <strong>5 minutes</strong>. Do not share it with anyone.</p>
+        <br/>
+        <p>Regards,<br/><strong>Team DevEx</strong><br/><em>Acquire the Future of Micro-SaaS.</em></p>
+    `);
 
     return { success: true, message: "OTP sent to email", email: user.email };
 };
@@ -83,7 +97,14 @@ const forgotPassword = async (email) => {
     user.otpExpiresAt = otpExpiresAt;
     await user.save();
 
-    await sendEmail(email, 'DevEx Password Reset Code', `Your password reset code is: ${otp}\nIt expires in 5 minutes.`);
+    await sendEmail(email, 'DevEx Password Reset Code', `
+        <p>Hey ${user.name},</p>
+        <p>We received a request to reset your <strong>DevEx</strong> password. Use the code below:</p>
+        <p style="font-size:28px;font-weight:bold;letter-spacing:6px;">${otp}</p>
+        <p>This code expires in <strong>5 minutes</strong>. If you didn't request this, you can safely ignore this email.</p>
+        <br/>
+        <p>Regards,<br/><strong>Team DevEx</strong><br/><em>Acquire the Future of Micro-SaaS.</em></p>
+    `);
     return { success: true, message: 'Recovery code sent to email' };
 };
 

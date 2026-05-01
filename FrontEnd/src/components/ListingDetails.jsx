@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ShoppingBag, MessageSquare, ArrowLeft, Shield } from 'lucide-react';
+import { ShoppingBag, MessageSquare, ArrowLeft, Shield, ExternalLink, BadgeCheck } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import MockPaymentModal from './MockPaymentModal';
 
 const ListingDetails = () => {
   const { id } = useParams();
@@ -14,6 +14,7 @@ const ListingDetails = () => {
   const [similarListings, setSimilarListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
     const fetchListingData = async () => {
@@ -44,17 +45,10 @@ const ListingDetails = () => {
     fetchListingData();
   }, [id]);
 
-  const handleBuyNow = async () => {
-    try {
-      if (!user) return navigate('/login');
-      
-      const res = await axios.post('http://localhost:3000/payments/enqueue', { listingId: id }, { withCredentials: true });
-      if (res.data?.sessionUrl) {
-        window.location.href = res.data.sessionUrl; // Redirect to Stripe
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.error || "Failed to initiate purchase.");
-    }
+  const handleBuyNow = () => {
+    if (!user) return navigate('/login');
+    if (listing?.isSold) return toast.error('This listing has already been sold.');
+    setShowPayment(true);
   };
 
   const handleChatWithSeller = () => {
@@ -147,8 +141,16 @@ const ListingDetails = () => {
               {listing.images && listing.images.length > 0 ? (
                 <img src={listing.images[activeImage]} alt={listing.title} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-[var(--accent)] text-4xl font-bold shadow-2xl animate-pulse">
+                <div className="w-24 h-24 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-[var(--accent)] text-4xl font-bold">
                   {listing.title?.charAt(0)}
+                </div>
+              )}
+              {/* Sold Badge Overlay */}
+              {listing.isSold && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <span className="bg-red-500 text-white font-extrabold text-lg px-6 py-2 rounded-full shadow-lg tracking-widest uppercase rotate-[-8deg]">
+                    SOLD
+                  </span>
                 </div>
               )}
             </div>
@@ -171,10 +173,15 @@ const ListingDetails = () => {
 
           {/* Right: Info */}
           <div className="bg-[var(--accent-bg)] border border-[var(--border)] p-4 md:p-8 rounded-2xl space-y-6">
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded-full text-[10px] font-bold uppercase tracking-widest border border-[var(--accent)]/20 shadow-sm">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-3 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded-full text-[10px] font-bold uppercase tracking-widest border border-[var(--accent)]/20">
                 {listing.category}
               </span>
+              {listing.isSold && (
+                <span className="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-[10px] font-bold uppercase tracking-widest border border-red-500/20">
+                  Sold
+                </span>
+              )}
             </div>
 
             <h1 className="text-4xl font-extrabold text-[var(--text-h)] tracking-tight leading-tight">{listing.title}</h1>
@@ -191,12 +198,29 @@ const ListingDetails = () => {
               </span>
             </div>
 
+            {/* Demo URL */}
+            {listing.demoUrl && (
+              <a
+                href={listing.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
+              >
+                <ExternalLink size={13} /> View Live Demo
+              </a>
+            )}
+
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button 
                 onClick={handleBuyNow}
-                className="flex-1 bg-[var(--accent)] text-[var(--bg)] font-bold text-sm h-14 rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-[var(--accent)]/25 active:scale-95"
+                disabled={listing.isSold}
+                className={`flex-1 font-bold text-sm h-14 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 ${
+                  listing.isSold
+                    ? 'bg-gray-500/20 text-gray-500 cursor-not-allowed'
+                    : 'bg-[var(--accent)] text-[var(--bg)] hover:opacity-90 shadow-lg shadow-[var(--accent)]/25'
+                }`}
               >
-                <ShoppingBag size={18} /> Buy SaaS Now
+                <ShoppingBag size={18} /> {listing.isSold ? 'Listing Sold' : 'Buy SaaS Now'}
               </button>
               
               <button 
@@ -249,6 +273,18 @@ const ListingDetails = () => {
         )}
       </div>
     </div>
+
+    {showPayment && listing && (
+      <MockPaymentModal
+        listing={listing}
+        onClose={() => setShowPayment(false)}
+        onSuccess={() => {
+          setShowPayment(false);
+          setListing(prev => ({ ...prev, isSold: true }));
+          toast.success('Purchase complete! Check your email for confirmation.');
+        }}
+      />
+    )}
   );
 };
 

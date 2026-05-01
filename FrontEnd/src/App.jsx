@@ -27,6 +27,7 @@ import Chat from './components/Chat'
 import Profile from './components/Profile'
 import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
+import MockBankDetails from './components/MockBankDetails'
 import { Analytics } from '@vercel/analytics/react';
 
 function ScrollToTop() {
@@ -88,6 +89,7 @@ function App() {
 
 <Route path="/dashboard/buyer" element={<DashboardLayout><BuyerDashboard /></DashboardLayout>} />
 <Route path="/dashboard/buyer/buys" element={<DashboardLayout><BuyerDashboard activeTab="buys" /></DashboardLayout>} />
+<Route path="/dashboard/buyer/payment" element={<DashboardLayout><MockBankDetails /></DashboardLayout>} />
       {/* Buyer Protected Routes */}
       <Route element={<ProtectedRoute allowedRoles={['buyer']} />}>
       </Route>
@@ -97,6 +99,8 @@ function App() {
         <Route path="/dashboard/seller" element={<DashboardLayout><SellerDashboard /></DashboardLayout>} />
         <Route path="/dashboard/seller/create" element={<DashboardLayout><SellerDashboard activeTab="create" /></DashboardLayout>} />
         <Route path="/dashboard/seller/posts" element={<DashboardLayout><SellerDashboard activeTab="posts" /></DashboardLayout>} />
+        <Route path="/dashboard/seller/analytics" element={<DashboardLayout><SellerDashboard activeTab="analytics" /></DashboardLayout>} />
+        <Route path="/dashboard/seller/payment" element={<DashboardLayout><MockBankDetails /></DashboardLayout>} />
       </Route>
 
       {/* Admin Protected Routes */}

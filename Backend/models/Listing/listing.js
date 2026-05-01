@@ -12,6 +12,8 @@ const listingSchema = new mongoose.Schema({
     clicks: { type: Number, default: 0 }, // Track popularity
     shortId: { type: String, default: () => Math.random().toString(36).substring(2, 8), unique: true },
     isApproved: { type: Boolean, default: false },
+    isSold: { type: Boolean, default: false },
+    soldAt: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now }
 });
 

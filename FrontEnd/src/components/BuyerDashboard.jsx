@@ -249,6 +249,15 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
                     >
                       <Heart size={16} className={`${isFav ? 'fill-red-500 text-red-500' : ''} ${processingFavs[listing._id] ? 'animate-pulse' : ''}`} />
                     </button>
+
+                    {/* Sold Badge */}
+                    {listing.isSold && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
+                        <span className="bg-red-500 text-white font-extrabold text-sm px-5 py-1.5 rounded-full shadow-lg tracking-widest uppercase rotate-[-6deg]">
+                          SOLD
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <Link to={`/listing/${listing._id}`} className="flex-1">

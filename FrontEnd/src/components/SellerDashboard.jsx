@@ -404,6 +404,90 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
         </div>
       )}
 
+      {activeTab === 'analytics' && (
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold text-[var(--text-h)]">Analytics</h1>
+            <p className="text-sm text-gray-500 mt-1">Performance overview of your SaaS listings</p>
+          </div>
+
+          {/* Top Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total Revenue', value: `$${sales.reduce((acc, s) => acc + (s.amountPaid || 0), 0).toLocaleString()}`, color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+              { label: 'Total Sales', value: sales.length, color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+              { label: 'Total Clicks', value: myListings.reduce((acc, l) => acc + (l.clicks || 0), 0).toLocaleString(), color: 'text-[var(--accent)]', bg: 'bg-[var(--accent)]/10 border-[var(--accent)]/20' },
+              { label: 'Active Listings', value: myListings.filter(l => l.isApproved && !l.isSold).length, color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
+            ].map((stat) => (
+              <div key={stat.label} className={`p-5 rounded-2xl border bg-[var(--accent-bg)] ${stat.bg} flex flex-col gap-2`}>
+                <span className={`text-2xl md:text-3xl font-extrabold ${stat.color}`}>{stat.value}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Per-Listing Performance */}
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Per-Listing Performance</h2>
+            {myListings.length === 0 ? (
+              <p className="text-sm text-gray-500 p-6 border border-[var(--border)] rounded-2xl bg-[var(--accent-bg)]">No listings yet. Create your first SaaS listing to see analytics.</p>
+            ) : (
+              <div className="space-y-3">
+                {myListings.sort((a, b) => (b.clicks || 0) - (a.clicks || 0)).map(l => {
+                  const maxClicks = Math.max(...myListings.map(x => x.clicks || 0), 1);
+                  const pct = Math.round(((l.clicks || 0) / maxClicks) * 100);
+                  const isSold = l.isSold;
+                  return (
+                    <div key={l._id} className="p-4 md:p-5 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-black/20 overflow-hidden flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-500">
+                          {l.images && l.images.length > 0
+                            ? <img src={l.images[0]} alt="" className="w-full h-full object-cover" />
+                            : l.title?.charAt(0)
+                          }
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <p className="text-sm font-bold text-[var(--text-h)] truncate">{l.title}</p>
+                            {isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full">Sold</span>}
+                            {l.isApproved && !isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full">Active</span>}
+                          </div>
+                          <div className="flex items-center gap-4 text-[11px] text-gray-500 mb-3">
+                            <span><strong className="text-[var(--text-h)]">{l.clicks || 0}</strong> clicks</span>
+                            <span><strong className="text-[var(--text-h)]">${l.price?.toLocaleString()}</strong> listed</span>
+                          </div>
+                          <div className="w-full bg-black/20 rounded-full h-1.5 overflow-hidden">
+                            <div className="h-full bg-[var(--accent)] rounded-full transition-all" style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Sales History */}
+          {sales.length > 0 && (
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Recent Sales</h2>
+              <div className="space-y-3">
+                {sales.map((s, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl">
+                    <div>
+                      <p className="text-sm font-bold text-[var(--text-h)]">{s.listingId?.title || 'Listing'}</p>
+                      <p className="text-[11px] text-gray-500">{new Date(s.purchasedAt || s.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                    </div>
+                    <span className="font-extrabold text-green-400 text-sm">+${(s.amountPaid || 0).toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Edit Modal Overlay */}
       {editingListing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">

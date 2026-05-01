@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, html) => {
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -11,10 +11,10 @@ const sendEmail = async (to, subject, text) => {
         });
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: `"DevEx" <${process.env.EMAIL_USER}>`,
             to,
             subject,
-            text
+            html
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -22,7 +22,7 @@ const sendEmail = async (to, subject, text) => {
         return info;
     } catch (error) {
         console.error('Error sending email:', error);
-        throw error; // Rethrow to let the controller handle the error
+        throw error;
     }
 };
 
