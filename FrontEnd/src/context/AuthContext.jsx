@@ -44,11 +44,23 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.signup(userData);
       if (data.success) {
-        setUser(data.user);
-        setRole(data.role);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('role', data.role);
-        return { success: true, role: data.role };
+        // Do not log the user in yet. They must verify OTP.
+        return { success: true };
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const verifyOTP = async (email, otp) => {
+    try {
+      const response = await authService.verifyOTP(email, otp);
+      if (response.success) {
+        setUser(response.user);
+        setRole(response.role);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('role', response.role);
+        return { success: true, role: response.role };
       }
     } catch (error) {
       throw error;
@@ -79,8 +91,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      return await authService.forgotPassword(email);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const resetPassword = async (resetData) => {
+    try {
+      return await authService.resetPassword(resetData);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, role, loading, login, signup, logout, loginWithGoogle }}>
+    <AuthContext.Provider value={{ user, role, loading, login, signup, verifyOTP, forgotPassword, resetPassword, logout, loginWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );

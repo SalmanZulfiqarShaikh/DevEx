@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
     googleId:     { type: String },       // for Google OAuth
     role:         { type: String, enum: ['buyer', 'seller', 'admin'], required: true },
     profilePic:   { type: String, default: "" },
+    isVerified:   { type: Boolean, default: false },
+    otp:          { type: String },
+    otpExpiresAt: { type: Date },
     createdAt:    { type: Date, default: Date.now },
     updatedAt:    { type: Date, default: Date.now },
 });
