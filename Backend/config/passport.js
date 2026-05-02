@@ -8,26 +8,36 @@ passport.use(new GoogleStrategy({
   callbackURL:  process.env.GOOGLE_CALLBACK_URL,
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    // Check if user already exists
+    const googleName = profile.displayName || profile.name?.givenName || 'User';
+    const googlePic  = profile.photos?.[0]?.value || null;
+
+    // Already registered with Google — sync latest name/pic
     let user = await User.findOne({ googleId: profile.id });
-
-    if (user) return done(null, user);
-
-    // Check if email already registered manually
-    user = await User.findOne({ email: profile.emails[0].value });
     if (user) {
-      // Link Google ID to existing account
-      user.googleId = profile.id;
+      user.name = googleName;
+      if (googlePic) user.profilePic = googlePic;
       await user.save();
       return done(null, user);
     }
 
-    // Brand new user — default role 'buyer', they can change later
+    // Email already registered manually — link Google + sync name & pic
+    user = await User.findOne({ email: profile.emails[0].value });
+    if (user) {
+      user.googleId  = profile.id;
+      user.name      = googleName;
+      if (googlePic) user.profilePic = googlePic;
+      await user.save();
+      return done(null, user);
+    }
+
+    // Brand new user
     user = await User.create({
-      name:     profile.displayName,
-      email:    profile.emails[0].value,
-      googleId: profile.id,
-      role:     'buyer',
+      name:       googleName,
+      email:      profile.emails[0].value,
+      googleId:   profile.id,
+      profilePic: googlePic,
+      role:       'buyer',
+      isVerified: true,
     });
 
     return done(null, user);

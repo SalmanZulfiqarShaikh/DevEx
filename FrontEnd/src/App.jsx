@@ -28,6 +28,7 @@ import Profile from './components/Profile'
 import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
 import MockBankDetails from './components/MockBankDetails'
+import OAuthCallback from './components/OAuthCallback'
 import { Analytics } from '@vercel/analytics/react';
 
 function ScrollToTop() {
@@ -85,6 +86,7 @@ function App() {
 <Route path="/verify-otp" element={<OTPVerification />} />
 <Route path="/forgot-password" element={<ForgotPassword />} />
 <Route path="/reset-password" element={<ResetPassword />} />
+<Route path="/auth/callback" element={<OAuthCallback />} />
 <Route path="/listing/:id" element={<ListingDetails />} />
 
 <Route path="/dashboard/buyer" element={<DashboardLayout><BuyerDashboard /></DashboardLayout>} />

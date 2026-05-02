@@ -206,6 +206,22 @@ const AdminDashboard = () => {
               )}
             </div>
 
+            {/* Links */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {selectedListing.demoUrl && (
+                <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/10">
+                  <span className="text-[10px] font-bold uppercase text-blue-400 block mb-1">Demo Link</span>
+                  <a href={selectedListing.demoUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 font-bold hover:underline truncate block">{selectedListing.demoUrl}</a>
+                </div>
+              )}
+              {selectedListing.repoUrl && (
+                <div className="p-3 rounded-xl bg-purple-500/5 border border-purple-500/10">
+                  <span className="text-[10px] font-bold uppercase text-purple-400 block mb-1">Repository Link</span>
+                  <a href={selectedListing.repoUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-purple-400 font-bold hover:underline truncate block">{selectedListing.repoUrl}</a>
+                </div>
+              )}
+            </div>
+
             {/* Descriptions */}
             <div className="space-y-4">
               <div>

@@ -6,7 +6,7 @@ const sendEmail = require('../../utils/sendEmail');
 // Get all purchases made by the logged-in buyer
 exports.getMyPurchases = async (req, res) => {
     try {
-        const purchases = await Purchase.find({ buyerId: req.user._id }).populate('listingId').sort({ createdAt: -1 });
+        const purchases = await Purchase.find({ buyerId: req.user.id }).populate('listingId').sort({ createdAt: -1 });
         res.status(200).json(purchases);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -18,7 +18,7 @@ exports.getMySales = async (req, res) => {
     try {
         const purchases = await Purchase.find().populate({
             path: 'listingId',
-            match: { sellerId: req.user._id }
+            match: { sellerId: req.user.id }
         }).sort({ createdAt: -1 });
 
         const mySales = purchases.filter(p => p.listingId != null);
@@ -37,16 +37,16 @@ exports.mockPurchase = async (req, res) => {
         if (!listing) return res.status(404).json({ error: 'Listing not found' });
         if (listing.isSold) return res.status(400).json({ error: 'This listing has already been sold' });
 
-        const buyer = await User.findById(req.user._id);
+        const buyer = await User.findById(req.user.id);
         if (!buyer) return res.status(404).json({ error: 'Buyer not found' });
 
         // Check not already purchased
-        const already = await Purchase.findOne({ buyerId: req.user._id, listingId });
+        const already = await Purchase.findOne({ buyerId: req.user.id, listingId });
         if (already) return res.status(400).json({ error: 'You have already purchased this listing' });
 
         // Record purchase
         await Purchase.create({
-            buyerId: req.user._id,
+            buyerId: req.user.id,
             listingId: listing._id,
             amountPaid: listing.price,
         });

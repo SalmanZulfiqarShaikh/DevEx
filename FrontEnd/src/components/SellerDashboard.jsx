@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, BarChart3, Plus, ArrowUpRight } from 'lucide-react';
+import { Wallet, BarChart3, Plus, ArrowUpRight, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -21,6 +21,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('AI');
   const [demoUrl, setDemoUrl] = useState('');
+  const [repoUrl, setRepoUrl] = useState('');
   const [images, setImages] = useState([]); // File state
   const [submitting, setSubmitting] = useState(false);
 
@@ -31,6 +32,8 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
   const [editLongDescription, setEditLongDescription] = useState('');
   const [editPrice, setEditPrice] = useState('');
   const [editCategory, setEditCategory] = useState('AI');
+  const [editDemoUrl, setEditDemoUrl] = useState('');
+  const [editRepoUrl, setEditRepoUrl] = useState('');
 
   const uId = user?._id || user?.id;
 
@@ -91,6 +94,8 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
     setEditLongDescription(listing.longDescription || '');
     setEditPrice(listing.price);
     setEditCategory(listing.category || 'AI');
+    setEditDemoUrl(listing.demoUrl || '');
+    setEditRepoUrl(listing.repoUrl || '');
   };
 
   const handleEditSubmit = async (e) => {
@@ -101,7 +106,9 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
         description: editDescription,
         longDescription: editLongDescription,
         price: editPrice,
-        category: editCategory
+        category: editCategory,
+        demoUrl: editDemoUrl,
+        repoUrl: editRepoUrl
       }, { withCredentials: true });
       toast.success("Listing updated successfully.");
       setEditingListing(null);
@@ -122,6 +129,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
     formData.append('price', price);
     formData.append('category', category);
     formData.append('demoUrl', demoUrl);
+    formData.append('repoUrl', repoUrl);
     
     images.forEach((img) => {
       formData.append('images', img);
@@ -133,7 +141,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success("SaaS listing created successfully!");
-      setTitle(''); setDescription(''); setLongDescription(''); setPrice(''); setDemoUrl(''); setImages([]);
+      setTitle(''); setDescription(''); setLongDescription(''); setPrice(''); setDemoUrl(''); setRepoUrl(''); setImages([]);
       fetchData();
       navigate('/dashboard/seller/posts');
     } catch (err) {
@@ -212,7 +220,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             <div className="p-6 rounded-3xl border border-gray-500/10 bg-[var(--accent-bg)] flex items-center justify-between">
               <div>
-                <div className="text-3xl font-bold">${sales.reduce((acc, s) => acc + (s.amountPaid / 100), 0).toLocaleString()}</div>
+                <div className="text-3xl font-bold">${sales.reduce((acc, s) => acc + (s.amountPaid || 0), 0).toLocaleString()}</div>
                 <span className="text-xs text-gray-400">Total Sales</span>
               </div>
               <Wallet size={24} className="text-green-500" />
@@ -338,6 +346,17 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
             </div>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Demo / Live URL (Optional)</label>
+              <input type="url" value={demoUrl} onChange={(e) => setDemoUrl(e.target.value)} placeholder="https://myapp.com" className="w-full bg-[var(--bg)] border border-gray-500/20 px-4 py-3 rounded-xl focus:outline-none text-[var(--text-h)]" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Repository / Code Link (Optional)</label>
+              <input type="url" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)} placeholder="https://github.com/..." className="w-full bg-[var(--bg)] border border-gray-500/20 px-4 py-3 rounded-xl focus:outline-none text-[var(--text-h)]" />
+            </div>
+          </div>
+
           <div>
             <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Product Images (Max 3)</label>
             <input type="file" multiple accept="image/*" onChange={handleFileChange} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[var(--accent)] file:text-[var(--bg)] hover:file:opacity-90" />
@@ -411,18 +430,62 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
             <p className="text-sm text-gray-500 mt-1">Performance overview of your SaaS listings</p>
           </div>
 
-          {/* Top Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Top Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { label: 'Total Revenue', value: `$${sales.reduce((acc, s) => acc + (s.amountPaid || 0), 0).toLocaleString()}`, color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
-              { label: 'Total Sales', value: sales.length, color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-              { label: 'Total Clicks', value: myListings.reduce((acc, l) => acc + (l.clicks || 0), 0).toLocaleString(), color: 'text-[var(--accent)]', bg: 'bg-[var(--accent)]/10 border-[var(--accent)]/20' },
-              { label: 'Active Listings', value: myListings.filter(l => l.isApproved && !l.isSold).length, color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
-            ].map((stat) => (
-              <div key={stat.label} className={`p-5 rounded-2xl border bg-[var(--accent-bg)] ${stat.bg} flex flex-col gap-2`}>
-                <span className={`text-2xl md:text-3xl font-extrabold ${stat.color}`}>{stat.value}</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{stat.label}</span>
-              </div>
+              { 
+                label: 'Total Revenue', 
+                value: `$${sales.reduce((acc, s) => acc + (s.amountPaid || 0), 0).toLocaleString()}`,
+                icon: Wallet,
+                color: 'from-emerald-500/20 to-emerald-500/5',
+                accent: 'text-emerald-400',
+                border: 'group-hover:border-emerald-500/30'
+              },
+              { 
+                label: 'Total Sales', 
+                value: sales.length,
+                icon: ShoppingBag,
+                color: 'from-blue-500/20 to-blue-500/5',
+                accent: 'text-blue-400',
+                border: 'group-hover:border-blue-500/30'
+              },
+              { 
+                label: 'Total Clicks', 
+                value: myListings.reduce((acc, l) => acc + (l.clicks || 0), 0).toLocaleString(),
+                icon: BarChart3,
+                color: 'from-[var(--accent)]/20 to-[var(--accent)]/5',
+                accent: 'text-[var(--accent)]',
+                border: 'group-hover:border-[var(--accent)]/30'
+              },
+              { 
+                label: 'Active Listings', 
+                value: myListings.filter(l => l.isApproved && !l.isSold).length,
+                icon: Plus,
+                color: 'from-purple-500/20 to-purple-500/5',
+                accent: 'text-purple-400',
+                border: 'group-hover:border-purple-500/30'
+              },
+            ].map((stat, i) => (
+              <motion.div 
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className={`group p-6 rounded-[2rem] border border-[var(--border)] bg-[var(--accent-bg)] relative overflow-hidden transition-all duration-500 ${stat.border}`}
+              >
+                {/* Glow Effect */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                <div className="relative z-10 flex flex-col gap-4">
+                  <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center ${stat.accent} border border-white/5`}>
+                    <stat.icon size={20} />
+                  </div>
+                  <div>
+                    <div className="text-3xl font-extrabold text-[var(--text-h)] tracking-tight mb-0.5">{stat.value}</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500 group-hover:text-gray-300 transition-colors">{stat.label}</div>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
 
@@ -438,9 +501,13 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
                   const pct = Math.round(((l.clicks || 0) / maxClicks) * 100);
                   const isSold = l.isSold;
                   return (
-                    <div key={l._id} className="p-4 md:p-5 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-black/20 overflow-hidden flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-500">
+                    <motion.div 
+                      key={l._id} 
+                      whileHover={{ x: 5 }}
+                      className="group p-4 md:p-5 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl relative overflow-hidden transition-all hover:border-[var(--accent)]/20"
+                    >
+                      <div className="flex items-start gap-4 relative z-10">
+                        <div className="w-12 h-12 rounded-xl bg-black/40 overflow-hidden flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-500 border border-white/5 group-hover:border-[var(--accent)]/30 transition-colors">
                           {l.images && l.images.length > 0
                             ? <img src={l.images[0]} alt="" className="w-full h-full object-cover" />
                             : l.title?.charAt(0)
@@ -449,19 +516,24 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2 mb-1">
                             <p className="text-sm font-bold text-[var(--text-h)] truncate">{l.title}</p>
-                            {isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full">Sold</span>}
-                            {l.isApproved && !isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full">Active</span>}
+                            {isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-white/5 text-gray-500 border border-white/10 rounded-full">Sold</span>}
+                            {l.isApproved && !isSold && <span className="text-[9px] font-bold uppercase px-2 py-0.5 bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 rounded-full">Active</span>}
                           </div>
                           <div className="flex items-center gap-4 text-[11px] text-gray-500 mb-3">
                             <span><strong className="text-[var(--text-h)]">{l.clicks || 0}</strong> clicks</span>
                             <span><strong className="text-[var(--text-h)]">${l.price?.toLocaleString()}</strong> listed</span>
                           </div>
-                          <div className="w-full bg-black/20 rounded-full h-1.5 overflow-hidden">
-                            <div className="h-full bg-[var(--accent)] rounded-full transition-all" style={{ width: `${pct}%` }} />
+                          <div className="w-full bg-black/30 rounded-full h-2 overflow-hidden border border-white/5">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${pct}%` }}
+                              transition={{ duration: 1, ease: "easeOut" }}
+                              className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/60 rounded-full shadow-[0_0_10px_var(--accent)]/20" 
+                            />
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -474,13 +546,18 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
               <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Recent Sales</h2>
               <div className="space-y-3">
                 {sales.map((s, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl">
-                    <div>
-                      <p className="text-sm font-bold text-[var(--text-h)]">{s.listingId?.title || 'Listing'}</p>
-                      <p className="text-[11px] text-gray-500">{new Date(s.purchasedAt || s.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-                    </div>
-                    <span className="font-extrabold text-green-400 text-sm">+${(s.amountPaid || 0).toLocaleString()}</span>
-                  </div>
+                    <motion.div 
+                      key={i} 
+                      whileHover={{ x: 5 }}
+                      className="flex items-center justify-between p-4 bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl hover:border-emerald-500/30 transition-all group relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="relative z-10">
+                        <p className="text-sm font-bold text-[var(--text-h)]">{s.listingId?.title || 'Listing'}</p>
+                        <p className="text-[11px] text-gray-500">{new Date(s.purchasedAt || s.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                      </div>
+                      <span className="relative z-10 font-extrabold text-emerald-400 text-sm tracking-tight">+${(s.amountPaid || 0).toLocaleString()}</span>
+                    </motion.div>
                 ))}
               </div>
             </div>
@@ -513,7 +590,6 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
                 <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Long Description (Optional)</label>
                 <textarea rows="4" value={editLongDescription} onChange={(e) => setEditLongDescription(e.target.value)} className="w-full bg-[var(--bg)] border border-gray-500/20 px-4 py-3 rounded-xl focus:outline-none text-sm text-[var(--text-h)]" />
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Price ($ USD)</label>
@@ -529,6 +605,17 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
                     <option value="DevTools">Developer Tools</option>
                     <option value="SaaS">General SaaS</option>
                   </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Demo URL</label>
+                  <input type="url" value={editDemoUrl} onChange={(e) => setEditDemoUrl(e.target.value)} className="w-full bg-[var(--bg)] border border-gray-500/20 px-4 py-3 rounded-xl focus:outline-none text-sm text-[var(--text-h)]" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Repo URL</label>
+                  <input type="url" value={editRepoUrl} onChange={(e) => setEditRepoUrl(e.target.value)} className="w-full bg-[var(--bg)] border border-gray-500/20 px-4 py-3 rounded-xl focus:outline-none text-sm text-[var(--text-h)]" />
                 </div>
               </div>
 

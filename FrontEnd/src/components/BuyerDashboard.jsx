@@ -1,11 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ShoppingBag, Heart, Search, TrendingUp, ExternalLink, ShieldCheck, Moon, Sun, Filter, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingBag, Heart, Search, TrendingUp, ExternalLink, ShieldCheck, Moon, Sun, Filter, ChevronRight, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import DevExChatbot from './DevEXChatBot';
+
+const FilterDropdown = ({ dropdown }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedOption = dropdown.options.find(o => o.value === dropdown.value);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--accent-bg)] text-[var(--text-h)] text-xs font-bold transition-all hover:border-[var(--accent)]/40 min-w-[140px] text-left"
+      >
+        <span className="flex-1 truncate">{selectedOption?.label}</span>
+        <ChevronDown size={14} className={`text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 mt-2 w-full min-w-[200px] bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl shadow-2xl z-50 overflow-hidden py-2"
+            >
+              {dropdown.options.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    dropdown.setValue(option.value);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-xs font-bold transition-colors ${
+                    dropdown.value === option.value
+                      ? 'text-[var(--accent)] bg-[var(--accent)]/5'
+                      : 'text-gray-400 hover:text-[var(--text-h)] hover:bg-white/[0.03]'
+                  }`}
+                >
+                  {option.label}
+                  {dropdown.value === option.value && <CheckCircle2 size={12} />}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const BuyerDashboard = ({ activeTab = 'overview' }) => {
   const navigate = useNavigate();
@@ -185,34 +235,42 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
       {activeTab === 'overview' && (
         <>
           {/* Filters Bar */}
-          <div className="flex flex-wrap items-center gap-4 mb-10">
+          <div className="flex flex-wrap items-center gap-3 mb-10">
             <div className="flex items-center gap-2">
-              <Filter size={16} className="text-gray-400" />
-              <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Sort By</span>
+              <Filter size={14} className="text-gray-400" />
+              <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Filter</span>
             </div>
-            
-            <select 
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="text-xs font-bold px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--accent-bg)] text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50"
-            >
-              <option value="latest">Latest Posts</option>
-              <option value="popular">Most Popular</option>
-              <option value="a-z">A - Z (Title)</option>
-            </select>
 
-            <select 
-              value={categoryOption}
-              onChange={(e) => setCategoryOption(e.target.value)}
-              className="text-xs font-bold px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--accent-bg)] text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50"
-            >
-              <option value="">All Categories</option>
-              <option value="AI">Artificial Intelligence</option>
-              <option value="Fintech">Fintech</option>
-              <option value="E-commerce">E-commerce</option>
-              <option value="DevTools">Developer Tools</option>
-              <option value="SaaS">General SaaS</option>
-            </select>
+            {/* Custom Dropdowns */}
+            {[
+              {
+                id: 'sort',
+                label: 'Sort By',
+                value: sortOption,
+                setValue: setSortOption,
+                options: [
+                  { value: 'latest', label: 'Latest Posts' },
+                  { value: 'popular', label: 'Most Popular' },
+                  { value: 'a-z', label: 'A – Z (Title)' }
+                ]
+              },
+              {
+                id: 'category',
+                label: 'Category',
+                value: categoryOption,
+                setValue: setCategoryOption,
+                options: [
+                  { value: '', label: 'All Categories' },
+                  { value: 'AI', label: 'Artificial Intelligence' },
+                  { value: 'Fintech', label: 'Fintech' },
+                  { value: 'E-commerce', label: 'E-commerce' },
+                  { value: 'DevTools', label: 'Developer Tools' },
+                  { value: 'SaaS', label: 'General SaaS' }
+                ]
+              }
+            ].map((dropdown) => (
+              <FilterDropdown key={dropdown.id} dropdown={dropdown} />
+            ))}
           </div>
 
           {/* Posts Feed */}

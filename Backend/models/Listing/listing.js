@@ -8,6 +8,7 @@ const listingSchema = new mongoose.Schema({
     price: { type: Number, required: true },
     category: { type: String },
     demoUrl: { type: String },
+    repoUrl: { type: String },
     images: [{ type: String }], // Store up to 3 image URLs
     clicks: { type: Number, default: 0 }, // Track popularity
     shortId: { type: String, default: () => Math.random().toString(36).substring(2, 8), unique: true },

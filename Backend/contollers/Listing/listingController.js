@@ -6,7 +6,7 @@ const detailsCache = new Map();
 
 exports.createListing = async (req, res) => {
     try {
-        const { title, description, longDescription, price, category, demoUrl } = req.body;
+        const { title, description, longDescription, price, category, demoUrl, repoUrl } = req.body;
         const sellerId = req.user.id || req.user._id;
 
         // Collect uploaded images if present
@@ -23,6 +23,7 @@ exports.createListing = async (req, res) => {
             price, 
             category, 
             demoUrl,
+            repoUrl,
             images: images.slice(0, 3) // Max 3
         });
 

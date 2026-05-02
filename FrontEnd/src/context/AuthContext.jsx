@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import authService from '../services/authService';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
 
@@ -8,21 +9,35 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is already logged in on mount
+  // On mount: load from localStorage, or fallback to /auth/me (for Google OAuth cookie sessions)
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     const savedRole = localStorage.getItem('role');
-    
+
     if (savedUser && savedRole && savedUser !== 'undefined') {
       try {
         setUser(JSON.parse(savedUser));
         setRole(savedRole);
+        setLoading(false);
+        return;
       } catch (e) {
         localStorage.removeItem('user');
         localStorage.removeItem('role');
       }
     }
-    setLoading(false);
+
+    // No localStorage — try to hydrate from cookie (Google OAuth)
+    axios.get('http://localhost:3000/auth/me', { withCredentials: true })
+      .then(res => {
+        if (res.data.success) {
+          setUser(res.data.user);
+          setRole(res.data.role);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
+          localStorage.setItem('role', res.data.role);
+        }
+      })
+      .catch(() => {}) // not logged in — stay as guest
+      .finally(() => setLoading(false));
   }, []);
 
   const login = async (credentials) => {

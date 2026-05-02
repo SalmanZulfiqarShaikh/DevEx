@@ -44,6 +44,7 @@ app.use('/listing', listingRoutes)
 app.use('/admin', require('./routes/adminRoutes'));
 app.use('/payments',  paymentRoutes);
 app.use('/purchases', require('./routes/purchaseRoutes'));
+app.use('/cards', require('./routes/cardRoutes'));
 app.use('/chat', require('./routes/chatRoutes'));
 app.use('/favorites', require('./routes/favoritesRoutes'));
 app.use('/profile', require('./routes/userProfileRoutes'));

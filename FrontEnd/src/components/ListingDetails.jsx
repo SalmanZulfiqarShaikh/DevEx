@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShoppingBag, MessageSquare, ArrowLeft, Shield, ExternalLink, BadgeCheck } from 'lucide-react';
+import { ShoppingBag, MessageSquare, ArrowLeft, Shield, ExternalLink, BadgeCheck, Code } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -199,17 +199,29 @@ const ListingDetails = () => {
               </span>
             </div>
 
-            {/* Demo URL */}
-            {listing.demoUrl && (
-              <a
-                href={listing.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
-              >
-                <ExternalLink size={13} /> View Live Demo
-              </a>
-            )}
+            {/* Links */}
+            <div className="flex flex-wrap gap-4 border-t border-[var(--border)] pt-4">
+              {listing.demoUrl && (
+                <a
+                  href={listing.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-xs font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
+                >
+                  <ExternalLink size={13} /> View Live Demo
+                </a>
+              )}
+              {listing.repoUrl && (
+                <a
+                  href={listing.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-xs font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
+                >
+                  <Code size={13} /> Repository / Code
+                </a>
+              )}
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button 

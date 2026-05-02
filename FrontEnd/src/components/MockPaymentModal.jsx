@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, Lock, CheckCircle2, Loader2, ShieldCheck } from 'lucide-react';
+import { X, CreditCard, Lock, CheckCircle2, Loader2, ShieldCheck, Plus, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
   const [step, setStep] = useState('form'); // form | processing | success
+  const [cards, setCards] = useState([]);
+  const [loadingCards, setLoadingCards] = useState(true);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
@@ -22,11 +27,40 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
     return digits;
   };
 
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/cards', { withCredentials: true });
+        setCards(res.data);
+        const defaultCard = res.data.find(c => c.isDefault);
+        if (defaultCard) setSelectedCardId(defaultCard._id);
+        else if (res.data.length > 0) setSelectedCardId(res.data[0]._id);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingCards(false);
+      }
+    };
+    fetchCards();
+  }, []);
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setStep('processing');
 
     try {
+      // If adding new, save it first
+      if (isAddingNew || cards.length === 0) {
+        const digits = cardNumber.replace(/\s/g, '');
+        if (digits.length < 16) throw new Error('Valid card number required');
+        await axios.post('http://localhost:3000/cards', {
+          cardholderName: name,
+          last4: digits.slice(-4),
+          brand: digits.startsWith('4') ? 'Visa' : 'Mastercard',
+          expiry: expiry
+        }, { withCredentials: true });
+      }
+
       // Fake 2s processing delay
       await new Promise(r => setTimeout(r, 2000));
       
@@ -38,7 +72,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
       setStep('success');
       if (onSuccess) onSuccess();
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Payment failed. Try again.');
+      toast.error(err.message || err.response?.data?.error || 'Payment failed. Try again.');
       setStep('form');
     }
   };
@@ -71,84 +105,139 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
               </button>
             </div>
 
-            {/* Order Summary */}
-            <div className="mx-6 mt-5 p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)]">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Order Summary</p>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-[var(--text-h)] truncate max-w-[200px]">{listing.title}</p>
-                  <p className="text-[11px] text-gray-500">{listing.category}</p>
-                </div>
-                <p className="text-lg font-extrabold text-[var(--accent)]">${listing.price?.toLocaleString()}</p>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">Cardholder Name</label>
-                <input
-                  required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">Card Number</label>
-                <div className="relative">
-                  <input
-                    required
-                    value={cardNumber}
-                    onChange={e => setCardNumber(formatCard(e.target.value))}
-                    placeholder="1234 5678 9012 3456"
-                    maxLength={19}
-                    className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600 pr-12"
-                  />
-                  <CreditCard size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600" />
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              {/* Order Summary */}
+              <div className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)]">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Order Summary</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-bold text-[var(--text-h)] truncate max-w-[200px]">{listing.title}</p>
+                    <p className="text-[11px] text-gray-500">{listing.category}</p>
+                  </div>
+                  <p className="text-lg font-extrabold text-[var(--accent)]">${listing.price?.toLocaleString()}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">Expiry</label>
-                  <input
-                    required
-                    value={expiry}
-                    onChange={e => setExpiry(formatExpiry(e.target.value))}
-                    placeholder="MM/YY"
-                    maxLength={5}
-                    className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
-                  />
+              {loadingCards ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">CVV</label>
-                  <input
-                    required
-                    value={cvv}
-                    onChange={e => setCvv(e.target.value.replace(/\D/g, '').slice(0, 3))}
-                    placeholder="123"
-                    maxLength={3}
-                    type="password"
-                    className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
-                  />
-                </div>
-              </div>
+              ) : (
+                <>
+                  {!isAddingNew && cards.length > 0 ? (
+                    <div className="space-y-4">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Select Payment Method</p>
+                      <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
+                        {cards.map(card => (
+                          <button
+                            key={card._id}
+                            onClick={() => setSelectedCardId(card._id)}
+                            className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                              selectedCardId === card._id 
+                                ? 'border-[var(--accent)] bg-[var(--accent)]/5' 
+                                : 'border-[var(--border)] bg-[var(--bg)] hover:border-[var(--accent)]/30'
+                            }`}
+                          >
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[8px] font-black ${
+                              card.brand === 'Visa' ? 'bg-blue-500/10 text-blue-400' : 'bg-orange-500/10 text-orange-400'
+                            }`}>
+                              {card.brand.toUpperCase()}
+                            </div>
+                            <div className="flex-1 text-left">
+                              <p className="text-xs font-bold text-[var(--text-h)]">•••• {card.last4}</p>
+                              <p className="text-[10px] text-gray-500">Exp {card.expiry}</p>
+                            </div>
+                            {selectedCardId === card._id && <CheckCircle2 size={14} className="text-[var(--accent)]" />}
+                          </button>
+                        ))}
+                      </div>
+                      <button 
+                        onClick={() => setIsAddingNew(true)}
+                        className="w-full flex items-center justify-center gap-2 py-3 border border-dashed border-[var(--border)] rounded-xl text-xs font-bold text-gray-500 hover:border-[var(--accent)]/50 hover:text-[var(--accent)] transition-all"
+                      >
+                        <Plus size={14} /> Add New Card
+                      </button>
 
-              <button
-                type="submit"
-                className="w-full h-12 bg-[var(--accent)] text-[var(--bg)] font-bold text-sm rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 mt-2"
-              >
-                <Lock size={14} />
-                Pay ${listing.price?.toLocaleString()} Securely
-              </button>
+                      <button
+                        onClick={() => handleSubmit()}
+                        className="w-full h-12 bg-[var(--accent)] text-[var(--bg)] font-bold text-sm rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Lock size={14} />
+                        Pay ${listing.price?.toLocaleString()} Securely
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Card Details</p>
+                        {cards.length > 0 && (
+                          <button 
+                            type="button"
+                            onClick={() => setIsAddingNew(false)}
+                            className="text-[10px] font-bold text-[var(--accent)] hover:underline"
+                          >
+                            Back to saved cards
+                          </button>
+                        )}
+                      </div>
+                      
+                      <input
+                        required
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder="Cardholder Name"
+                        className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
+                      />
+
+                      <div className="relative">
+                        <input
+                          required
+                          value={cardNumber}
+                          onChange={e => setCardNumber(formatCard(e.target.value))}
+                          placeholder="Card Number"
+                          maxLength={19}
+                          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600 pr-12"
+                        />
+                        <CreditCard size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600" />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <input
+                          required
+                          value={expiry}
+                          onChange={e => setExpiry(formatExpiry(e.target.value))}
+                          placeholder="MM/YY"
+                          maxLength={5}
+                          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
+                        />
+                        <input
+                          required
+                          value={cvv}
+                          onChange={e => setCvv(e.target.value.replace(/\D/g, '').slice(0, 3))}
+                          placeholder="CVV"
+                          maxLength={3}
+                          type="password"
+                          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-[var(--text-h)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors placeholder:text-gray-600"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full h-12 bg-[var(--accent)] text-[var(--bg)] font-bold text-sm rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Lock size={14} />
+                        Pay ${listing.price?.toLocaleString()} Securely
+                      </button>
+                    </form>
+                  )}
+                </>
+              )}
 
               <p className="text-center text-[10px] text-gray-600 flex items-center justify-center gap-1.5">
                 <ShieldCheck size={11} /> 256-bit SSL encrypted · Escrow protected
               </p>
-            </form>
+            </div>
           </motion.div>
         )}
 
@@ -224,3 +313,4 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
 };
 
 export default MockPaymentModal;
+
