@@ -18,6 +18,7 @@
   --accent: #ffffff;
   --accent-bg: rgba(255, 255, 255, 0.05);
   --glow: rgba(255, 255, 255, 0.08);
+  --modal-bg: #111114;
 
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
   --heading: 'Inter', system-ui, sans-serif;
@@ -40,6 +41,7 @@
   --accent: #000000;
   --accent-bg: rgba(0, 0, 0, 0.05);
   --glow: rgba(0, 0, 0, 0.03);
+  --modal-bg: #f8f8fa;
   --card-shadow: rgba(0, 0, 0, 0.08) 0px 20px 40px -10px;
   color-scheme: light;
 }

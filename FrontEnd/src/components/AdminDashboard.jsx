@@ -173,7 +173,7 @@ const AdminDashboard = () => {
       {/* Details Modal */}
       {selectedListing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--accent-bg)] border border-gray-500/10 p-6 md:p-8 rounded-3xl max-w-2xl w-full relative space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-[var(--modal-bg)] border border-gray-500/10 p-6 md:p-8 rounded-3xl max-w-2xl w-full relative space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setSelectedListing(null)}
               className="absolute top-4 right-4 p-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 hover:text-[var(--text-h)] transition-colors"

@@ -10,10 +10,11 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/devex')
     const existing = await User.findOne({ email });
     if (existing) {
         existing.role = 'admin';
+        existing.passwordHash = await bcrypt.hash(`${process.env.ADMIN_PASS}`, 12);
         await existing.save();
-        console.log('Admin user updated:', email);
+        console.log('Admin user updated (role + password):', email);
     } else {
-        const passwordHash = await bcrypt.hash('admin123', 12);
+        const passwordHash = await bcrypt.hash(`${process.env.ADMIN_PASS}`, 12);
         await User.create({
             name: 'DevEx Admin',
             email,

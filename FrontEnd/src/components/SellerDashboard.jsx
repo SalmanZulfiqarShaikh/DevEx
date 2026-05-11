@@ -571,7 +571,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[var(--accent-bg)] border border-gray-500/10 p-8 rounded-3xl max-w-xl w-full relative space-y-4 shadow-2xl"
+            className="bg-[var(--modal-bg)] border border-gray-500/10 p-8 rounded-3xl max-w-xl w-full relative space-y-4 shadow-2xl"
           >
             <h2 className="text-xl font-bold text-[var(--text-h)]">Edit SaaS Listing</h2>
             
@@ -638,7 +638,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[var(--accent-bg)] border border-gray-500/10 p-8 rounded-3xl max-w-sm w-full relative text-center space-y-6 shadow-2xl"
+            className="bg-[var(--modal-bg)] border border-gray-500/10 p-8 rounded-3xl max-w-sm w-full relative text-center space-y-6 shadow-2xl"
           >
             <h3 className="text-lg font-bold text-[var(--text-h)]">Are you sure?</h3>
             <p className="text-sm text-gray-400">Do you really want to take this post down? This action cannot be undone.</p>

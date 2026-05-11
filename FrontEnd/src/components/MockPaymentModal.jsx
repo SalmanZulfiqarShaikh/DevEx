@@ -87,7 +87,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="w-full max-w-md bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden"
+            className="w-full max-w-md bg-[var(--modal-bg)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--border)]">
@@ -247,7 +247,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full max-w-sm bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl p-12 flex flex-col items-center gap-6 text-center shadow-2xl"
+            className="w-full max-w-sm bg-[var(--modal-bg)] border border-[var(--border)] rounded-2xl p-12 flex flex-col items-center gap-6 text-center shadow-2xl"
           >
             <div className="w-16 h-16 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center">
               <Loader2 size={28} className="text-[var(--accent)] animate-spin" />
@@ -273,7 +273,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full max-w-sm bg-[var(--accent-bg)] border border-[var(--border)] rounded-2xl p-12 flex flex-col items-center gap-6 text-center shadow-2xl"
+            className="w-full max-w-sm bg-[var(--modal-bg)] border border-[var(--border)] rounded-2xl p-12 flex flex-col items-center gap-6 text-center shadow-2xl"
           >
             <motion.div
               initial={{ scale: 0 }}
