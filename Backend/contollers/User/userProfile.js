@@ -8,7 +8,7 @@ exports.updateProfile = async (req, res) => {
         const updateData = { name };
 
         if (req.file) {
-            updateData.profilePic = `http://localhost:3000/uploads/${req.file.filename}`;
+            updateData.profilePic = req.file.path;
         }
 
         const user = await User.findByIdAndUpdate(userId, updateData, { new: true }).select('-passwordHash');

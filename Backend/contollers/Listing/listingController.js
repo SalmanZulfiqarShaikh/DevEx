@@ -12,7 +12,7 @@ exports.createListing = async (req, res) => {
         // Collect uploaded images if present
         let images = [];
         if (req.files) {
-            images = req.files.map(f => `http://localhost:3000/uploads/${f.filename}`);
+            images = req.files.map(f => f.path);
         }
 
         const listing = await Listing.create({
