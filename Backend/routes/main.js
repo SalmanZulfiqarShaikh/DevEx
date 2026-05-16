@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { clearStack } = require('../utils/stack');
+const { clearStack } = require('../utils/Stack');
 
 router.post('/logout', (req, res) => {
     const userId = req.user?.id;
