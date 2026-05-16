@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Send, User, MessageSquare, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const socket = io('http://localhost:3000', { withCredentials: true, autoConnect: false });
+const socket = io('https://devex-backend-pk.fly.dev', { withCredentials: true, autoConnect: false });
 
 const Chat = () => {
   const { user } = useAuth();
@@ -57,7 +57,7 @@ const Chat = () => {
 
   const fetchContacts = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/chat/contacts', { withCredentials: true });
+      const res = await axios.get('https://devex-backend-pk.fly.dev/chat/contacts', { withCredentials: true });
       setContacts(res.data);
       
       // If we came from a "Chat with Seller" but they aren't in contacts yet, add them temporarily
@@ -71,7 +71,7 @@ const Chat = () => {
 
   const fetchHistory = async (otherUserId) => {
     try {
-      const res = await axios.get(`http://localhost:3000/chat/history/${otherUserId}`, { withCredentials: true });
+      const res = await axios.get(`https://devex-backend-pk.fly.dev/chat/history/${otherUserId}`, { withCredentials: true });
       setMessages(res.data);
     } catch (err) {
       console.error("Error fetching history:", err);
@@ -101,7 +101,7 @@ const Chat = () => {
 
     try {
       // 1. Persist to DB
-      const res = await axios.post('http://localhost:3000/chat/message', {
+      const res = await axios.post('https://devex-backend-pk.fly.dev/chat/message', {
         receiverId: selectedContact._id,
         text: newMessage.trim()
       }, { withCredentials: true });
@@ -144,7 +144,7 @@ const Chat = () => {
                 >
                   <div className="w-10 h-10 rounded-xl bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] font-bold overflow-hidden flex-shrink-0">
                     {contact.profilePic ? (
-                      <img src={contact.profilePic.startsWith('http') ? contact.profilePic : `http://localhost:3000${contact.profilePic}`} alt="" className="w-full h-full object-cover" />
+                      <img src={contact.profilePic.startsWith('http') ? contact.profilePic : `https://devex-backend-pk.fly.dev${contact.profilePic}`} alt="" className="w-full h-full object-cover" />
                     ) : (
                       contact.name?.charAt(0) || 'U'
                     )}
@@ -203,13 +203,13 @@ const Chat = () => {
                     <div className="w-6 h-6 rounded-full bg-[var(--accent-bg)] border border-[var(--border)] flex items-center justify-center text-[10px] font-bold text-[var(--accent)] overflow-hidden flex-shrink-0">
                       {isMine ? (
                         user?.profilePic ? (
-                          <img src={user.profilePic.startsWith('http') ? user.profilePic : `http://localhost:3000${user.profilePic}`} alt="" className="w-full h-full object-cover" />
+                          <img src={user.profilePic.startsWith('http') ? user.profilePic : `https://devex-backend-pk.fly.dev${user.profilePic}`} alt="" className="w-full h-full object-cover" />
                         ) : (
                           user?.name?.charAt(0) || 'Me'
                         )
                       ) : (
                         selectedContact?.profilePic ? (
-                          <img src={selectedContact.profilePic.startsWith('http') ? selectedContact.profilePic : `http://localhost:3000${selectedContact.profilePic}`} alt="" className="w-full h-full object-cover" />
+                          <img src={selectedContact.profilePic.startsWith('http') ? selectedContact.profilePic : `https://devex-backend-pk.fly.dev${selectedContact.profilePic}`} alt="" className="w-full h-full object-cover" />
                         ) : (
                           selectedContact?.name?.charAt(0) || 'U'
                         )

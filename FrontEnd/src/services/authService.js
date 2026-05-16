@@ -91,7 +91,7 @@ const authService = {
       };
     }
     // Real OAuth flow usually starts by redirecting to the backend
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL || 'https://devex-backend-pk.fly.dev'}/auth/google`;
   }
 };
 

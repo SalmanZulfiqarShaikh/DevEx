@@ -30,7 +30,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/cards', { withCredentials: true });
+        const res = await axios.get('https://devex-backend-pk.fly.dev/cards', { withCredentials: true });
         setCards(res.data);
         const defaultCard = res.data.find(c => c.isDefault);
         if (defaultCard) setSelectedCardId(defaultCard._id);
@@ -53,7 +53,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
       if (isAddingNew || cards.length === 0) {
         const digits = cardNumber.replace(/\s/g, '');
         if (digits.length < 16) throw new Error('Valid card number required');
-        await axios.post('http://localhost:3000/cards', {
+        await axios.post('https://devex-backend-pk.fly.dev/cards', {
           cardholderName: name,
           last4: digits.slice(-4),
           brand: digits.startsWith('4') ? 'Visa' : 'Mastercard',
@@ -64,7 +64,7 @@ const MockPaymentModal = ({ listing, onClose, onSuccess }) => {
       // Fake 2s processing delay
       await new Promise(r => setTimeout(r, 2000));
       
-      await axios.post('http://localhost:3000/purchases/mock', 
+      await axios.post('https://devex-backend-pk.fly.dev/purchases/mock', 
         { listingId: listing._id },
         { withCredentials: true }
       );

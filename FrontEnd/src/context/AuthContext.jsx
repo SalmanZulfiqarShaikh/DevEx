@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     // No localStorage — try to hydrate from cookie (Google OAuth)
-    axios.get('http://localhost:3000/auth/me', { withCredentials: true })
+    axios.get('https://devex-backend-pk.fly.dev/auth/me', { withCredentials: true })
       .then(res => {
         if (res.data.success) {
           setUser(res.data.user);

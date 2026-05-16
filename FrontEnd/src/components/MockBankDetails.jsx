@@ -26,7 +26,7 @@ const MockBankDetails = () => {
   // Fetch cards from DB
   const fetchCards = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/cards', { withCredentials: true });
+      const res = await axios.get('https://devex-backend-pk.fly.dev/cards', { withCredentials: true });
       setCards(res.data);
     } catch (err) {
       console.error(err);
@@ -43,7 +43,7 @@ const MockBankDetails = () => {
     if (digits.length < 16) return toast.error('Enter a valid 16-digit card number');
     setSaving(true);
     try {
-      const res = await axios.post('http://localhost:3000/cards', {
+      const res = await axios.post('https://devex-backend-pk.fly.dev/cards', {
         cardholderName: form.cardholderName,
         last4: digits.slice(-4),
         brand: detectBrand(digits),
@@ -63,7 +63,7 @@ const MockBankDetails = () => {
   const handleDelete = async (id) => {
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:3000/cards/${id}`, { withCredentials: true });
+      await axios.delete(`https://devex-backend-pk.fly.dev/cards/${id}`, { withCredentials: true });
       setCards(prev => prev.filter(c => c._id !== id));
       toast.success('Card removed');
     } catch (err) {
@@ -75,7 +75,7 @@ const MockBankDetails = () => {
 
   const handleSetDefault = async (id) => {
     try {
-      await axios.put(`http://localhost:3000/cards/${id}/default`, {}, { withCredentials: true });
+      await axios.put(`https://devex-backend-pk.fly.dev/cards/${id}/default`, {}, { withCredentials: true });
       setCards(prev => prev.map(c => ({ ...c, isDefault: c._id === id })));
     } catch (err) {
       toast.error('Failed to set default');

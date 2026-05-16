@@ -33,7 +33,7 @@ const DashboardLayout = ({ children }) => {
   React.useEffect(() => {
     const fetchUnread = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/chat/unread-count', { withCredentials: true });
+        const res = await axios.get('https://devex-backend-pk.fly.dev/chat/unread-count', { withCredentials: true });
         setUnreadCount(res.data.count);
       } catch (err) {
         console.error("Failed to read unread counts", err);

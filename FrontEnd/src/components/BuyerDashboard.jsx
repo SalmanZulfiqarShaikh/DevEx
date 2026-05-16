@@ -76,16 +76,16 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
     try {
       setLoading(true);
       // Fetch listings with query options
-      const listRes = await axios.get(`http://localhost:3000/listing?q=${searchQuery}&sort=${sortOption}&category=${categoryOption}`);
+      const listRes = await axios.get(`https://devex-backend-pk.fly.dev/listing?q=${searchQuery}&sort=${sortOption}&category=${categoryOption}`);
       if (Array.isArray(listRes.data)) setListings(listRes.data);
 
       if (user) {
         // Fetch Last Buys
-        const buysRes = await axios.get('http://localhost:3000/purchases/my', { withCredentials: true });
+        const buysRes = await axios.get('https://devex-backend-pk.fly.dev/purchases/my', { withCredentials: true });
         if (Array.isArray(buysRes.data)) setPurchases(buysRes.data);
 
         // Fetch Favorites
-        const favRes = await axios.get('http://localhost:3000/favorites', { withCredentials: true });
+        const favRes = await axios.get('https://devex-backend-pk.fly.dev/favorites', { withCredentials: true });
         if (Array.isArray(favRes.data)) setFavorites(favRes.data);
       }
     } catch (err) {
@@ -124,13 +124,13 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
       
       const isFav = favorites.some(f => f.listingId?._id === listingId);
       if (isFav) {
-        await axios.delete(`http://localhost:3000/favorites/${listingId}`, { withCredentials: true });
+        await axios.delete(`https://devex-backend-pk.fly.dev/favorites/${listingId}`, { withCredentials: true });
       } else {
-        await axios.post('http://localhost:3000/favorites', { listingId }, { withCredentials: true });
+        await axios.post('https://devex-backend-pk.fly.dev/favorites', { listingId }, { withCredentials: true });
       }
       
       // Refresh favorites
-      const favRes = await axios.get('http://localhost:3000/favorites', { withCredentials: true });
+      const favRes = await axios.get('https://devex-backend-pk.fly.dev/favorites', { withCredentials: true });
       setFavorites(favRes.data);
     } catch (err) {
       console.error("Error toggling favorite:", err);
@@ -323,7 +323,7 @@ const BuyerDashboard = ({ activeTab = 'overview' }) => {
                       <div className="w-6 h-6 rounded-full bg-[var(--accent)] text-[var(--bg)] flex items-center justify-center text-[10px] font-bold overflow-hidden">
                         {listing.sellerProfilePic ? (
                           <img 
-                            src={listing.sellerProfilePic.startsWith('http') ? listing.sellerProfilePic : `http://localhost:3000${listing.sellerProfilePic}`} 
+                            src={listing.sellerProfilePic.startsWith('http') ? listing.sellerProfilePic : `https://devex-backend-pk.fly.dev${listing.sellerProfilePic}`} 
                             alt="" 
                             className="w-full h-full object-cover" 
                           />

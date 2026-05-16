@@ -40,10 +40,10 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const listRes = await axios.get(`http://localhost:3000/listing?sellerId=${uId}`, { withCredentials: true });
+      const listRes = await axios.get(`https://devex-backend-pk.fly.dev/listing?sellerId=${uId}`, { withCredentials: true });
       if (Array.isArray(listRes.data)) setMyListings(listRes.data);
 
-      const salesRes = await axios.get('http://localhost:3000/purchases/sales', { withCredentials: true });
+      const salesRes = await axios.get('https://devex-backend-pk.fly.dev/purchases/sales', { withCredentials: true });
       if (Array.isArray(salesRes.data)) setSales(salesRes.data);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -78,7 +78,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
 
   const confirmDeleteListing = async () => {
     try {
-      await axios.delete(`http://localhost:3000/listing/delete/${deletingListingId}`, { withCredentials: true });
+      await axios.delete(`https://devex-backend-pk.fly.dev/listing/delete/${deletingListingId}`, { withCredentials: true });
       toast.success("Listing deleted successfully.");
       setDeletingListingId(null);
       fetchData();
@@ -101,7 +101,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/listing/update/${editingListing._id}`, {
+      await axios.put(`https://devex-backend-pk.fly.dev/listing/update/${editingListing._id}`, {
         title: editTitle,
         description: editDescription,
         longDescription: editLongDescription,
@@ -136,7 +136,7 @@ const SellerDashboard = ({ activeTab = 'overview' }) => {
     });
 
     try {
-      await axios.post('http://localhost:3000/listing/create', formData, {
+      await axios.post('https://devex-backend-pk.fly.dev/listing/create', formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' }
       });

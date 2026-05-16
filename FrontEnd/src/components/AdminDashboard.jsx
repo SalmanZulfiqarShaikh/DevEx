@@ -16,7 +16,7 @@ const AdminDashboard = () => {
 
   const fetchListings = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/admin/listings', { withCredentials: true });
+      const res = await axios.get('https://devex-backend-pk.fly.dev/admin/listings', { withCredentials: true });
       setListings(res.data);
     } catch (err) {
       toast.error('Failed to fetch listings');
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:3000/admin/listings/${id}/approve`, {}, { withCredentials: true });
+      await axios.put(`https://devex-backend-pk.fly.dev/admin/listings/${id}/approve`, {}, { withCredentials: true });
       toast.success('Listing Approved');
       if (selectedListing && selectedListing._id === id) {
         setSelectedListing(prev => ({ ...prev, isApproved: true }));
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
-      await axios.delete(`http://localhost:3000/admin/listings/${id}`, { withCredentials: true });
+      await axios.delete(`https://devex-backend-pk.fly.dev/admin/listings/${id}`, { withCredentials: true });
       toast.success('Listing Deleted');
       setSelectedListing(null);
       fetchListings();
@@ -137,7 +137,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-500/20 border border-gray-500/10">
                     {listing.sellerId?.profilePic ? (
-                      <img src={listing.sellerId.profilePic.startsWith('http') ? listing.sellerId.profilePic : `http://localhost:3000${listing.sellerId.profilePic}`} alt="" className="w-full h-full object-cover" />
+                      <img src={listing.sellerId.profilePic.startsWith('http') ? listing.sellerId.profilePic : `https://devex-backend-pk.fly.dev${listing.sellerId.profilePic}`} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-gray-400">{listing.sellerId?.name?.charAt(0)}</div>
                     )}
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
             <div className="flex items-center gap-4 border-b border-gray-500/10 pb-4">
               <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-500/20 border border-gray-500/10">
                 {selectedListing.sellerId?.profilePic ? (
-                  <img src={selectedListing.sellerId.profilePic.startsWith('http') ? selectedListing.sellerId.profilePic : `http://localhost:3000${selectedListing.sellerId.profilePic}`} alt="" className="w-full h-full object-cover" />
+                  <img src={selectedListing.sellerId.profilePic.startsWith('http') ? selectedListing.sellerId.profilePic : `https://devex-backend-pk.fly.dev${selectedListing.sellerId.profilePic}`} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-lg font-bold text-gray-400">{selectedListing.sellerId?.name?.charAt(0)}</div>
                 )}

@@ -24,7 +24,7 @@ const Profile = () => {
     }
 
     try {
-      const res = await axios.put('http://localhost:3000/profile', formData, {
+      const res = await axios.put('https://devex-backend-pk.fly.dev/profile', formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' }
       });
@@ -44,7 +44,7 @@ const Profile = () => {
   };
 
   const userProfilePic = user?.profilePic;
-  const picSrc = userProfilePic ? (userProfilePic.startsWith('http') ? userProfilePic : `http://localhost:3000${userProfilePic}`) : null;
+  const picSrc = userProfilePic ? (userProfilePic.startsWith('http') ? userProfilePic : `https://devex-backend-pk.fly.dev${userProfilePic}`) : null;
 
   return (
     <div className="p-4 md:p-8 max-w-md mx-auto mt-4 md:mt-12 flex flex-col justify-center min-h-[60vh] relative">

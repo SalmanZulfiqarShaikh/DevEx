@@ -21,16 +21,16 @@ const ListingDetails = () => {
       try {
         setLoading(true);
         // Fetch current listing
-        const res = await axios.get(`http://localhost:3000/listing/${id}`);
+        const res = await axios.get(`https://devex-backend-pk.fly.dev/listing/${id}`);
         setListing(res.data);
 
         // Fetch similar listings by category
-        let similarRes = await axios.get(`http://localhost:3000/listing?category=${res.data.category}`);
+        let similarRes = await axios.get(`https://devex-backend-pk.fly.dev/listing?category=${res.data.category}`);
         let filtered = similarRes.data.filter(l => l._id !== id);
         
         // Fallback: If no similar category listings exist, get generic listings
         if (filtered.length === 0) {
-          const genericRes = await axios.get(`http://localhost:3000/listing`);
+          const genericRes = await axios.get(`https://devex-backend-pk.fly.dev/listing`);
           filtered = genericRes.data.filter(l => l._id !== id).slice(0, 3);
         }
         
