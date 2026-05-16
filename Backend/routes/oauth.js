@@ -19,9 +19,11 @@ router.get('/google/callback',
 
     // Also set cookie for same-origin requests
     res.cookie('token', token, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+  httpOnly: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  secure: true,
+  sameSite: 'none'
+});
 
     const envUrl = process.env.FRONTEND_URL;
     const frontendUrl = envUrl && envUrl.startsWith('http') ? envUrl : 'http://localhost:5173';

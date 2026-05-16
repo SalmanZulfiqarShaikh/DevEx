@@ -16,7 +16,7 @@ router.post('/verify', async (req, res) => {
     try {
         const { token, user, role } = await verifySignup(req.body);
         // After successful OTP verification, we grant the cookie and log the user in
-        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000, secure: true, sameSite: 'none' });
         res.json({ success: true, user, role });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
