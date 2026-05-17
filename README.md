@@ -164,10 +164,9 @@ npm run dev
 
 ---
 
-## 🔗 Live Links
+## 🔗 Live Link
 
-- **Frontend:** [devexpk.vercel.app](https://devexpk.vercel.app)
-- **Backend:** (Deployment Pending)
+-[devexpk.vercel.app](https://devexpk.vercel.app)
 
 Built with ❤️ by the DevEx Team.
 
